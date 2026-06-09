@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bloom AI - Innovating the spirit of bloom</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-container": "#191f31",
+                "surface-container-high": "#23293c",
+                "tertiary": "#bcc7de",
+                "tertiary-container": "#364154",
+                "on-tertiary-container": "#a2adc4",
+                "on-tertiary-fixed": "#111c2d",
+                "on-background": "#dce1fb",
+                "surface-dim": "#0c1324",
+                "surface": "#0c1324",
+                "surface-container-highest": "#2e3447",
+                "background": "#0c1324",
+                "on-tertiary-fixed-variant": "#3c475a",
+                "inverse-on-surface": "#2a3043",
+                "inverse-surface": "#dce1fb",
+                "tertiary-fixed-dim": "#bcc7de",
+                "on-error-container": "#ffdad6",
+                "on-secondary-container": "#00374d",
+                "tertiary-fixed": "#d8e3fb",
+                "on-secondary": "#00354a",
+                "on-surface-variant": "#c5c5d3",
+                "on-primary": "#05297a",
+                "on-secondary-fixed": "#001e2c",
+                "secondary-fixed-dim": "#7bd0ff",
+                "on-tertiary": "#263143",
+                "surface-container-low": "#151b2d",
+                "outline-variant": "#444651",
+                "error-container": "#93000a",
+                "secondary-container": "#00a6e0",
+                "on-primary-fixed": "#00164e",
+                "secondary": "#7bd0ff",
+                "on-error": "#690005",
+                "on-primary-container": "#90a8ff",
+                "outline": "#8f909d",
+                "surface-variant": "#2e3447",
+                "on-secondary-fixed-variant": "#004c69",
+                "on-surface": "#dce1fb",
+                "primary-fixed-dim": "#b6c4ff",
+                "error": "#ffb4ab",
+                "primary-container": "#1e3a8a",
+                "primary": "#b6c4ff",
+                "surface-container-lowest": "#070d1f",
+                "surface-tint": "#b6c4ff",
+                "inverse-primary": "#4059aa",
+                "surface-bright": "#33394c",
+                "secondary-fixed": "#c4e7ff",
+                "on-primary-fixed-variant": "#264191",
+                "primary-fixed": "#dce1ff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "md": "24px",
+                "base": "8px",
+                "lg": "48px",
+                "margin-desktop": "64px",
+                "xl": "80px",
+                "xs": "4px",
+                "sm": "12px",
+                "margin-mobile": "16px",
+                "gutter": "24px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Source Serif 4"
+                ],
+                "body-md": [
+                        "Source Serif 4"
+                ],
+                "display-lg-mobile": [
+                        "Poppins"
+                ],
+                "label-sm": [
+                        "Poppins"
+                ],
+                "label-md": [
+                        "Poppins"
+                ],
+                "title-lg": [
+                        "Source Serif 4"
+                ],
+                "display-lg": [
+                        "Poppins"
+                ],
+                "headline-md": [
+                        "Poppins"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "36px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.08em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "title-lg": [
+                        "24px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "30px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+        
+        .glass-edge {
+            position: relative;
+        }
+        .glass-edge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(182, 196, 255, 0.2) 0%, rgba(182, 196, 255, 0) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .glass-tier-1 {
+            background-color: rgba(182, 196, 255, 0.03);
+            backdrop-filter: blur(4px);
+        }
+        .glass-tier-2 {
+            background-color: rgba(182, 196, 255, 0.08);
+            backdrop-filter: blur(50px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen relative overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+<video autoplay="" class="fixed inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-screen" loop="" muted="" playsinline="">
+<source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260315_073750_51473149-4350-4920-ae24-c8214286f323.mp4" type="video/mp4"/>
+</video>
+<main class="relative z-10 min-h-screen flex flex-col lg:flex-row p-4 gap-4 lg:p-6 lg:gap-6 w-full max-w-[1440px] mx-auto">
+<section class="flex-1 lg:w-[52%] lg:flex-none relative rounded-[2rem] glass-tier-2 glass-edge flex flex-col justify-between p-6 lg:p-10 overflow-hidden min-h-[90vh]">
+<header class="flex justify-between items-center z-20">
+<div class="flex items-center gap-3">
+<img alt="Bloom minimal flower logo icon in white" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLs_HjLl8AE3nb1p_-76Cqs7Oo0SdatmsHMAABDxsV1GiBU5mxt8CD-C-sKVmc6tlYfGDuRoEpHoT6Pwk3QNij-yjeFvz-2D-a8yVOtm6ZDiHZ9JHLo0nvtU79UP1KrNsFA_90sLtGPZnkSh675PBhAOkiSIXYTmFI2IQm3oVzFpRtodinEpY-OHjKw4BzZgkNe-rJmD7Kqb_akheBIho4h5rttBrV4oCOQ2rbzTQNwcZtEv371On0XZaTE"/>
+<span class="font-headline-md text-2xl font-semibold text-primary">bloom</span>
+</div>
+<button class="px-5 py-2.5 rounded-full glass-tier-1 glass-edge font-label-sm text-label-sm text-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                    Menu
+                    <span class="material-symbols-outlined text-[18px]" data-icon="menu">menu</span>
+</button>
+</header>
+<div class="flex flex-col items-center text-center mt-12 mb-12 z-20">
+<img alt="Large minimal flower logo icon representing the Bloom AI brand, rendered in stark white against the dark background." class="w-20 h-20 object-contain mb-8 opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-500" src="https://lh3.googleusercontent.com/aida/AP1WRLs_HjLl8AE3nb1p_-76Cqs7Oo0SdatmsHMAABDxsV1GiBU5mxt8CD-C-sKVmc6tlYfGDuRoEpHoT6Pwk3QNij-yjeFvz-2D-a8yVOtm6ZDiHZ9JHLo0nvtU79UP1KrNsFA_90sLtGPZnkSh675PBhAOkiSIXYTmFI2IQm3oVzFpRtodinEpY-OHjKw4BzZgkNe-rJmD7Kqb_akheBIho4h5rttBrV4oCOQ2rbzTQNwcZtEv371On0XZaTE"/>
+<h1 class="font-display-lg-mobile lg:font-display-lg text-display-lg-mobile lg:text-display-lg text-primary max-w-2xl mb-10 leading-tight">
+                    Innovating the <em class="font-body-lg italic text-primary/80">spirit</em> of bloom AI
+                </h1>
+<button class="glass-tier-2 glass-edge rounded-full p-2 pr-6 flex items-center gap-4 hover:scale-105 transition-all duration-300 group mb-12 cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center group-hover:bg-primary/25 transition-colors">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="download">download</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary tracking-widest uppercase">Explore Now</span>
+</button>
+<div class="flex flex-wrap justify-center gap-3">
+<span class="px-4 py-2 rounded-full border border-primary/20 text-xs font-label-sm text-label-sm tracking-widest uppercase text-on-surface-variant hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer">Artistic Gallery</span>
+<span class="px-4 py-2 rounded-full border border-primary/20 text-xs font-label-sm text-label-sm tracking-widest uppercase text-on-surface-variant hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer">AI Generation</span>
+<span class="px-4 py-2 rounded-full border border-primary/20 text-xs font-label-sm text-label-sm tracking-widest uppercase text-on-surface-variant hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer">3D Structures</span>
+</div>
+</div>
+<div class="flex flex-col items-center text-center z-20">
+<span class="text-[10px] tracking-[0.2em] uppercase text-on-surface-variant mb-4 font-label-sm">VISIONARY DESIGN</span>
+<p class="font-body-lg text-body-lg text-secondary-fixed-dim max-w-md mb-6">
+                    "We imagined a <em class="font-body-lg italic text-primary">realm</em> with no ending."
+                </p>
+<div class="flex items-center gap-4 w-full max-w-[200px] justify-center opacity-60">
+<div class="h-[1px] flex-1 bg-primary/30"></div>
+<span class="text-[10px] tracking-widest uppercase text-primary font-label-sm">MARCUS AURELIO</span>
+<div class="h-[1px] flex-1 bg-primary/30"></div>
+</div>
+</div>
+</section>
+<section class="hidden lg:flex lg:w-[48%] flex-col gap-6">
+<div class="flex justify-end gap-4">
+<div class="glass-tier-2 glass-edge rounded-full px-6 py-3 flex items-center gap-6">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-primary hover:scale-110 transition-all cursor-pointer" data-icon="alternate_email">alternate_email</span>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-primary hover:scale-110 transition-all cursor-pointer" data-icon="work">work</span>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-primary hover:scale-110 transition-all cursor-pointer" data-icon="photo_camera">photo_camera</span>
+</div>
+<button class="glass-tier-2 glass-edge rounded-full px-6 py-3 flex items-center gap-2 hover:bg-primary/10 hover:scale-105 transition-all duration-300 group">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Account</span>
+<span class="material-symbols-outlined text-[18px] text-primary group-hover:rotate-12 transition-transform" data-icon="magic_button">magic_button</span>
+</button>
+</div>
+<div class="flex-1 grid grid-cols-2 gap-6 content-end pb-4">
+<div class="col-span-2 glass-tier-1 glass-edge rounded-[2rem] p-8 flex justify-between items-end hover:scale-[1.02] hover:bg-primary/[0.05] transition-all duration-500 cursor-pointer group">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Enter our ecosystem</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm">Join the network of digital botanists and visionary creators.</p>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center group-hover:bg-primary/10 group-hover:border-primary/40 transition-all">
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<div class="glass-tier-1 glass-edge rounded-[2rem] p-8 flex flex-col justify-between hover:scale-[1.02] hover:bg-primary/[0.05] transition-all duration-500 cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center mb-12">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="magic_button">magic_button</span>
+</div>
+<div>
+<h4 class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2">Processing</h4>
+<p class="font-body-lg text-body-lg text-primary">Neural generation active</p>
+</div>
+</div>
+<div class="glass-tier-1 glass-edge rounded-[2rem] p-8 flex flex-col justify-between hover:scale-[1.02] hover:bg-primary/[0.05] transition-all duration-500 cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center mb-12">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="menu_book">menu_book</span>
+</div>
+<div>
+<h4 class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2">Growth Archive</h4>
+<p class="font-body-lg text-body-lg text-primary">Explore past iterations</p>
+</div>
+</div>
+<div class="col-span-2 glass-tier-1 glass-edge rounded-[2rem] p-4 flex items-center gap-6 hover:scale-[1.02] hover:bg-primary/[0.05] transition-all duration-500 cursor-pointer group">
+<div class="w-24 h-16 rounded-xl overflow-hidden shrink-0 border border-primary/20">
+<img alt="Advanced digital sculpting of a plant structure, displayed in ethereal grayscale to match the liquid glass minimalist aesthetic of the interface." class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/AP1WRLupVrLeX-lLmLnUvo7j4uzWMSP253fvAEbCEqZiU_a1cDxDRDSUhOWbucQ0-wa3hFDnBYtPqcEZkK0OpZK3SArjTjdYjgwoNQfhcGQLWBquhYEb4TWeOarz1nMU3Q4jTfDbEB-Ax52oTUBvWb7CEPJRNJWRdUNj3eO4axy9uWvqUvN07kscasGiTuZl64KTpgx8qjup2220v8apUOTEP64pU5NBt8xs7WvPTfOWdgq1_VIAOTlX5G1vfYM"/>
+</div>
+<div class="flex-1 flex justify-between items-center pr-4">
+<div>
+<h4 class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-1">Feature</h4>
+<p class="font-body-lg text-body-lg text-primary">Advanced Plant Sculpting</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary group-hover:translate-x-1 transition-all" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

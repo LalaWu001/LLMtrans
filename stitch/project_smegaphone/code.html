@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project - SMegaphone</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#353437",
+                    "on-error": "#690005",
+                    "on-tertiary-container": "#00320e",
+                    "error-container": "#93000a",
+                    "surface-container-low": "#1b1b1d",
+                    "secondary-fixed-dim": "#4cd6ff",
+                    "inverse-on-surface": "#303032",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#00531c",
+                    "surface-dim": "#131315",
+                    "inverse-surface": "#e4e2e4",
+                    "on-secondary": "#003543",
+                    "on-surface": "#e4e2e4",
+                    "surface-container": "#1f1f21",
+                    "on-secondary-fixed-variant": "#004e60",
+                    "surface-container-lowest": "#0e0e10",
+                    "text-primary": "#FFFFFF",
+                    "on-primary-container": "#00285c",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#00a741",
+                    "background": "#131315",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-secondary-container": "#00566b",
+                    "sidebar-bg": "rgba(44, 44, 46, 0.6)",
+                    "primary": "#adc6ff",
+                    "surface-container-high": "#2a2a2c",
+                    "tertiary": "#53e16f",
+                    "primary-container": "#4b8eff",
+                    "text-secondary": "#8E8E93",
+                    "glass-surface": "rgba(28, 28, 30, 0.7)",
+                    "on-surface-variant": "#c1c6d7",
+                    "surface": "#131315",
+                    "outline-variant": "#414755",
+                    "secondary-container": "#14d1ff",
+                    "surface-variant": "#353437",
+                    "outline": "#8b90a0",
+                    "status-online": "#34C759",
+                    "tertiary-fixed-dim": "#53e16f",
+                    "status-busy": "#FF3B30",
+                    "secondary": "#a6e6ff",
+                    "primary-fixed": "#d8e2ff",
+                    "on-tertiary-fixed": "#002107",
+                    "glass-border": "rgba(255, 255, 255, 0.12)",
+                    "on-tertiary": "#003911",
+                    "on-background": "#e4e2e4",
+                    "on-primary": "#002e69",
+                    "surface-bright": "#39393b",
+                    "tertiary-fixed": "#72fe88",
+                    "surface-tint": "#adc6ff",
+                    "inverse-primary": "#005bc1",
+                    "secondary-fixed": "#b7eaff",
+                    "on-primary-fixed": "#001a41",
+                    "on-secondary-fixed": "#001f28",
+                    "on-primary-fixed-variant": "#004493"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "topbar-height": "52px",
+                    "gutter-md": "16px",
+                    "sidebar-width": "300px",
+                    "stack-sm": "8px",
+                    "margin-page": "32px",
+                    "stack-xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                    "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                    "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+                    "mono-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: #131315; color: #e4e2e4; }
+        .glass-panel {
+            background: rgba(28, 28, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-[52px] z-50 flex items-center justify-between px-gutter-md bg-glass-surface backdrop-blur-[20px] shadow-sm border-b border-glass-border">
+<div class="flex items-center gap-8">
+<div class="font-headline-xl text-headline-xl font-bold text-primary tracking-tighter">
+                SMegaphone
+            </div>
+<div class="hidden md:flex items-center gap-6 mt-1">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Register</a>
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 scale-95 transition-transform duration-150" href="#">Project</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Chat</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">VPN</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Settings</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">About</a>
+</div>
+</div>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined cursor-pointer hover:bg-white/5 transition-all duration-200 p-1 rounded-DEFAULT" data-icon="account_circle">account_circle</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-white/5 transition-all duration-200 p-1 rounded-DEFAULT" data-icon="help">help</span>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 mt-[52px] p-margin-page overflow-y-auto">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Header Section (Spans full width) -->
+<header class="lg:col-span-12 mb-4">
+<h1 class="font-headline-xl text-headline-xl text-text-primary mb-2">SMegaphone Project Hub</h1>
+<p class="font-body-lg text-body-lg text-text-secondary max-w-3xl">
+                    A desktop chat client engineered for experimental AI-mediated communication research. 
+                    Providing a robust, isolated environment for localized identity protocols and shared conversation spaces.
+                </p>
+</header>
+<!-- Main Features (Bento Grid) -->
+<div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Feature 1 -->
+<div class="glass-panel rounded-lg p-6 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-text-primary">Shared Conversation Channel</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex-1">
+                        A multi-agent routing environment where experimental AI models act as mediators, observers, or active participants in real-time dialogue streams. Data is structured for rigorous transcript analysis.
+                    </p>
+</div>
+<!-- Feature 2 -->
+<div class="glass-panel rounded-lg p-6 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="fingerprint">fingerprint</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-text-primary">Local Identity Protocol</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex-1">
+                        Zero-knowledge local bridging ensures participant anonymity while maintaining consistent session continuity across distributed research nodes.
+                    </p>
+</div>
+<!-- Feature 3 (Spans 2 cols on md) -->
+<div class="glass-panel rounded-lg p-6 flex flex-col gap-4 md:col-span-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="computer">computer</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-text-primary">Desktop Client Workflow</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-4">
+<span class="font-label-caps text-label-caps text-primary block mb-1">Step 1</span>
+<span class="font-body-md text-body-md text-on-surface">Secure localized initialization and handshake.</span>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-4">
+<span class="font-label-caps text-label-caps text-secondary block mb-1">Step 2</span>
+<span class="font-body-md text-body-md text-on-surface">Encrypted bridge establishment to primary Python workers.</span>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-4">
+<span class="font-label-caps text-label-caps text-tertiary block mb-1">Step 3</span>
+<span class="font-body-md text-body-md text-on-surface">Full-duplex participation in AI-mediated sessions.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar / Status Panel -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- System Status Card -->
+<div class="glass-panel rounded-lg p-6 glow-active">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase tracking-wider">System Status</h3>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Core Routing Engine</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-online shadow-[0_0_8px_rgba(52,199,89,0.6)]"></div>
+<span class="font-mono-sm text-mono-sm text-status-online">ONLINE</span>
+</div>
+</div>
+<div class="h-[1px] w-full bg-glass-border"></div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Local Bridge Workers</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-online shadow-[0_0_8px_rgba(52,199,89,0.6)]"></div>
+<span class="font-mono-sm text-mono-sm text-status-online">3/3 ACTIVE</span>
+</div>
+</div>
+<div class="h-[1px] w-full bg-glass-border"></div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">AI Inference Cluster</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-busy shadow-[0_0_8px_rgba(255,59,48,0.6)]"></div>
+<span class="font-mono-sm text-mono-sm text-status-busy">STRESS TEST</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Architecture Flow Mini-Diagram -->
+<div class="glass-panel rounded-lg p-6 flex flex-col gap-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Architecture Flow</h3>
+<div class="flex flex-col gap-2 relative">
+<div class="absolute left-[11px] top-6 bottom-6 w-[2px] bg-glass-border z-0"></div>
+<div class="flex items-center gap-4 z-10">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border border-glass-border flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[14px]" data-icon="desktop_windows">desktop_windows</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-text-primary bg-surface-container-low px-2 py-1 rounded-DEFAULT border border-glass-border">Desktop UI</span>
+</div>
+<div class="flex items-center gap-4 z-10">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border border-glass-border flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[14px]" data-icon="router">router</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-text-primary bg-surface-container-low px-2 py-1 rounded-DEFAULT border border-glass-border">Local Bridge</span>
+</div>
+<div class="flex items-center gap-4 z-10">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border border-glass-border flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[14px]" data-icon="code">code</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-text-primary bg-surface-container-low px-2 py-1 rounded-DEFAULT border border-glass-border">Python Workers</span>
+</div>
+<div class="flex items-center gap-4 z-10">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border border-glass-border flex items-center justify-center text-primary-fixed">
+<span class="material-symbols-outlined text-[14px]" data-icon="hub">hub</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-text-primary bg-surface-container-low px-2 py-1 rounded-DEFAULT border border-glass-border">Shared AI Conversation</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Statement -->
+<footer class="lg:col-span-12 mt-8 pt-6 border-t border-glass-border text-center">
+<p class="font-label-caps text-label-caps text-text-secondary uppercase tracking-widest">
+                    Strictly for Academic &amp; Experimental Research Purposes. Not for commercial deployment.
+                </p>
+</footer>
+</div>
+</main>
+</body></html>

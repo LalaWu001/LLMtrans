@@ -1,0 +1,60 @@
+# Dependencies and Python environments
+node_modules/
+.venv/
+venv/
+env/
+**/.venv/
+**/__pycache__/
+*.py[cod]
+
+# Local IDE and OS files
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.user
+*.suo
+
+# Build and package output
+dist/
+release/
+out/
+coverage/
+*.exe
+*.msi
+*.dmg
+*.AppImage
+*.zip
+*.7z
+*.rar
+
+# Local databases and runtime state
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.log
+logs/
+tmp/
+temp/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Browser authentication and conversation data
+Core_Architecture/cookies/cookies.json
+Core_Architecture/test/test5.txt
+Core_Architecture/cookies/*.local.json
+Core_Architecture/test/*.local.*
+
+# Generated website references and temporary checks
+website/_*.png
+website/*_landing_page.zip
+

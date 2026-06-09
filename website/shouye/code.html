@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Equilibrium - Live Better</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config Injection -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#c6c6cf",
+                      "error-container": "#93000a",
+                      "error": "#ffb4ab",
+                      "surface-container-high": "#2a2a2c",
+                      "tertiary-container": "#e3e1ea",
+                      "inverse-on-surface": "#313032",
+                      "tertiary": "#ffffff",
+                      "surface-bright": "#39393b",
+                      "on-primary-fixed": "#1a1c1c",
+                      "surface-container-low": "#1c1b1d",
+                      "secondary-fixed-dim": "#c6c6cf",
+                      "on-secondary": "#2f3037",
+                      "on-background": "#e5e1e4",
+                      "surface-container-highest": "#353437",
+                      "on-surface": "#e5e1e4",
+                      "on-tertiary-fixed": "#1b1b21",
+                      "on-primary-fixed-variant": "#454747",
+                      "on-primary": "#2f3131",
+                      "tertiary-fixed": "#e3e1ea",
+                      "background": "#131315",
+                      "surface-tint": "#c6c6c7",
+                      "on-tertiary": "#303037",
+                      "outline": "#8e9192",
+                      "primary-fixed-dim": "#c6c6c7",
+                      "primary-fixed": "#e2e2e2",
+                      "on-error-container": "#ffdad6",
+                      "primary": "#ffffff",
+                      "surface-container-lowest": "#0e0e10",
+                      "on-secondary-fixed-variant": "#45464e",
+                      "surface-container": "#201f22",
+                      "surface-variant": "#353437",
+                      "inverse-primary": "#5d5f5f",
+                      "surface": "#131315",
+                      "on-secondary-fixed": "#1a1b22",
+                      "on-tertiary-container": "#64646b",
+                      "on-secondary-container": "#b4b4bd",
+                      "on-tertiary-fixed-variant": "#46464d",
+                      "on-error": "#690005",
+                      "outline-variant": "#444748",
+                      "primary-container": "#e2e2e2",
+                      "secondary-container": "#45464e",
+                      "on-primary-container": "#636565",
+                      "on-surface-variant": "#c4c7c8",
+                      "secondary-fixed": "#e2e1eb",
+                      "surface-dim": "#131315",
+                      "inverse-surface": "#e5e1e4",
+                      "tertiary-fixed-dim": "#c7c5ce"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "64px",
+                      "margin-mobile": "20px",
+                      "container-max": "1200px",
+                      "gutter": "24px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Geist"
+                      ],
+                      "display-lg": [
+                              "Geist"
+                      ],
+                      "headline-lg-mobile": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "mono-stats": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.08em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "64px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "mono-stats": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "300"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<!-- Custom Styles for Liquid Glass -->
+<style>
+        .liquid-glass {
+            background-color: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .liquid-glass-modal {
+            background-color: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            mix-blend-mode: luminosity;
+        }
+
+        .liquid-border-gradient {
+            position: relative;
+        }
+        .liquid-border-gradient::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden h-screen w-screen relative selection:bg-primary selection:text-background">
+<!-- Background Video -->
+<div class="absolute inset-0 z-0">
+<video autoplay="" class="w-full h-full object-cover opacity-80" loop="" muted="" playsinline="">
+<source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260511_230229_7c9bc431-46cf-489a-948d-e8144d8eb5d4.mp4" type="video/mp4"/>
+</video>
+<!-- Overlay Gradient for better text readability -->
+<div class="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80"></div>
+</div>
+<!-- Main Content Canvas -->
+<div class="relative z-10 w-full h-full flex flex-col items-center justify-between">
+<!-- TopAppBar (From JSON - Adjusted for Hero) -->
+<header class="w-[90%] max-w-container-max flex justify-between items-center px-gutter py-4 mt-4 bg-surface/40 backdrop-blur-[40px] rounded-full border border-white/10 z-50">
+<!-- Brand -->
+<div class="flex items-center gap-2 group cursor-pointer style_interactions scale-95 duration-200 ease-out hover:scale-100">
+<span class="material-symbols-outlined text-primary text-[24px]">all_inclusive</span>
+<span class="font-headline-lg text-headline-lg font-semibold tracking-tighter text-primary">Equilibrium</span>
+</div>
+<!-- Desktop Nav Links (Hidden on Mobile) -->
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-primary border-b border-primary pb-1 font-label-sm text-label-sm uppercase tracking-widest" href="#">Home</a>
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest" href="#">Wellness</a>
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest" href="#">Routine</a>
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest" href="#">Our Team</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<a class="hidden md:block text-secondary hover:text-primary font-label-sm text-label-sm uppercase tracking-widest transition-colors" href="#">Log in</a>
+<!-- Trailing Action -->
+<button class="px-6 py-3 rounded-full border border-white/10 font-label-sm text-label-sm uppercase tracking-widest text-primary hover:bg-primary hover:text-background transition-all duration-300 style_interactions scale-95 ease-out">
+                    Begin Now
+                </button>
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden liquid-glass w-12 h-12 rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95" id="mobileMenuBtn">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+</div>
+</header>
+<!-- Hero Content -->
+<main class="flex-1 flex flex-col items-center justify-center w-full max-w-container-max px-margin-mobile md:px-margin-desktop text-center mt-[-80px]">
+<div class="liquid-glass p-8 md:p-12 rounded-3xl max-w-3xl flex flex-col items-center space-y-8 animate-fade-in-up liquid-border-gradient shadow-2xl">
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-primary tracking-tighter leading-tight drop-shadow-lg">
+                    Live Better, <br/>Feel Whole Every Day
+                </h1>
+<p class="font-body-md text-body-md text-secondary max-w-xl mx-auto leading-relaxed">
+                    Take charge of your routines, elevate your wellness, and find mental equilibrium. Your journey to high-performance living begins here.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-8">
+<button class="bg-primary text-background px-8 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity whitespace-nowrap">
+                        Start Today
+                    </button>
+<button class="liquid-glass text-primary px-8 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary/20 transition-colors whitespace-nowrap liquid-border-gradient">
+                        Discover How
+                    </button>
+</div>
+</div>
+</main>
+<!-- Scroll Indicator (Decorative) -->
+<div class="mb-8 flex flex-col items-center gap-2 opacity-50 animate-pulse">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Scroll to explore</span>
+<span class="material-symbols-outlined text-secondary">arrow_downward</span>
+</div>
+</div>
+<!-- NavigationDrawer (Mobile Overlay) -->
+<div class="fixed inset-0 z-50 w-full h-screen bg-background/80 backdrop-blur-[40px] flex-col p-margin-mobile gap-8 bg-white/12 border-l border-white/10 hidden opacity-0 transition-all duration-500 ease-in-out" id="mobileDrawer">
+<div class="flex justify-between items-center mb-8">
+<span class="font-headline-lg text-headline-lg text-primary font-medium tracking-tighter">Equilibrium</span>
+<button class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" id="closeMenuBtn">
+<span class="material-symbols-outlined text-primary text-2xl">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-6">
+<a class="flex items-center gap-4 text-primary font-semibold text-2xl hover:translate-x-2 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-4 text-secondary text-2xl hover:translate-x-2 transition-transform" href="#">
+<span class="material-symbols-outlined">spa</span>
+                Wellness
+            </a>
+<a class="flex items-center gap-4 text-secondary text-2xl hover:translate-x-2 transition-transform" href="#">
+<span class="material-symbols-outlined">event_repeat</span>
+                Routine
+            </a>
+<a class="flex items-center gap-4 text-secondary text-2xl hover:translate-x-2 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+                Our Team
+            </a>
+</nav>
+<div class="mt-auto pb-8 flex flex-col gap-4">
+<a class="text-secondary hover:text-primary font-label-sm text-label-sm uppercase tracking-widest transition-colors py-4 border-t border-white/10 w-full" href="#">Log in</a>
+</div>
+</div>
+<!-- Minimal Script for Mobile Menu -->
+<script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDrawer.classList.remove('hidden');
+            // Slight delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                mobileDrawer.classList.remove('opacity-0');
+                mobileDrawer.classList.add('opacity-100');
+                mobileDrawer.classList.add('flex');
+            }, 10);
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileDrawer.classList.remove('opacity-100');
+            mobileDrawer.classList.add('opacity-0');
+            setTimeout(() => {
+                mobileDrawer.classList.add('hidden');
+                mobileDrawer.classList.remove('flex');
+            }, 500); // match transition duration
+        });
+    </script>
+</body></html>

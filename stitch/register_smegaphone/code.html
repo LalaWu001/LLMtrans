@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - SMegaphone</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --text: #f6f8ff;
+      --muted: rgba(235, 241, 255, 0.66);
+      --glass: rgba(20, 26, 38, 0.48);
+      --glass-strong: rgba(27, 35, 52, 0.68);
+      --line: rgba(255, 255, 255, 0.18);
+      --line-strong: rgba(255, 255, 255, 0.34);
+      --blue: #9fc2ff;
+      --cyan: #56d9ff;
+      --green: #42f59b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(86, 217, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 78% 10%, rgba(159, 194, 255, 0.22), transparent 30%),
+        radial-gradient(circle at 72% 82%, rgba(66, 245, 155, 0.10), transparent 28%),
+        linear-gradient(135deg, #070911 0%, #0e1320 46%, #05070d 100%);
+      overflow: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 78%);
+      opacity: .45;
+    }
+    .glass {
+      background: linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,.055));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.26), 0 28px 90px rgba(0,0,0,.38);
+      backdrop-filter: blur(34px) saturate(170%);
+      -webkit-backdrop-filter: blur(34px) saturate(170%);
+    }
+    .glass-strong {
+      background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.075));
+      border: 1px solid var(--line-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 34px 110px rgba(0,0,0,.46);
+      backdrop-filter: blur(42px) saturate(190%);
+      -webkit-backdrop-filter: blur(42px) saturate(190%);
+    }
+    .field {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(6, 10, 18, .44);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 13px 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+    .field:focus {
+      border-color: rgba(86,217,255,.62);
+      box-shadow: 0 0 0 4px rgba(86,217,255,.12);
+      background: rgba(6, 10, 18, .58);
+    }
+    .segmented button[aria-pressed="true"] {
+      background: rgba(255,255,255,.18);
+      color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.24);
+    }
+  </style>
+</head>
+<body>
+  <main class="relative z-10 min-h-screen grid place-items-center p-8">
+    <section class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-5">
+      <div class="glass rounded-3xl p-8 lg:p-10 min-h-[620px] flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 rounded-2xl grid place-items-center bg-white/15 border border-white/20">
+              <span class="material-symbols-outlined text-[28px] text-cyan-200">campaign</span>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold tracking-tight">SMegaphone</div>
+              <div class="text-xs uppercase tracking-[0.28em] text-white/45">Research Desktop Client</div>
+            </div>
+          </div>
+
+          <div class="mt-16">
+            <p class="text-sm uppercase tracking-[0.24em] text-cyan-100/60 font-semibold">Local identity gateway</p>
+            <h1 class="mt-4 text-5xl font-extrabold tracking-tight leading-tight">Sign in before entering the workspace.</h1>
+            <p class="mt-5 text-base leading-7 text-white/62 max-w-md">The full project interface is available after login or local profile registration. This keeps account setup separate from the main navigation.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="glass rounded-2xl p-4">
+            <div class="text-xs text-white/45 uppercase tracking-widest">Mode</div>
+            <div class="mt-2 font-semibold">Desktop</div>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <div class="text-xs text-white/45 uppercase tracking-widest">Scope</div>
+            <div class="mt-2 font-semibold">Academic</div>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <div class="text-xs text-white/45 uppercase tracking-widest">Status</div>
+            <div class="mt-2 font-semibold text-emerald-200">Ready</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-strong rounded-3xl p-8 lg:p-10">
+        <div class="segmented inline-grid grid-cols-2 rounded-2xl border border-white/15 bg-black/22 p-1 text-sm font-semibold">
+          <button aria-pressed="true" class="rounded-xl px-6 py-3 transition">Login</button>
+          <button aria-pressed="false" class="rounded-xl px-6 py-3 text-white/55 transition">Register</button>
+        </div>
+
+        <div class="mt-10">
+          <h2 class="text-3xl font-bold tracking-tight">Welcome back</h2>
+          <p class="mt-2 text-white/58">Use your local account or create a research profile on this device.</p>
+        </div>
+
+        <form class="mt-8 space-y-5">
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-white/45 font-semibold">Account or nickname</label>
+            <input class="field mt-2" type="text" placeholder="e.g. researcher-a" />
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-white/45 font-semibold">Password</label>
+            <input class="field mt-2" type="password" placeholder="Enter password" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-2xl border border-white/12 bg-white/[0.045] p-4">
+            <div class="flex items-center gap-3">
+              <div class="h-12 w-12 rounded-full border border-dashed border-white/24 grid place-items-center bg-white/[0.04]">
+                <span class="material-symbols-outlined text-white/56">add_a_photo</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold">Register option</div>
+                <div class="text-xs text-white/45">Avatar and nickname are saved locally.</div>
+              </div>
+            </div>
+            <button type="button" class="rounded-xl border border-white/16 bg-white/[0.06] px-4 py-3 text-sm font-semibold hover:bg-white/[0.11] transition">Switch to Register</button>
+          </div>
+
+          <button type="submit" class="w-full rounded-2xl bg-white text-slate-950 py-4 font-bold shadow-[0_18px_48px_rgba(159,194,255,.28)] hover:bg-cyan-100 transition">Enter SMegaphone</button>
+          <button type="button" class="w-full rounded-2xl border border-white/16 bg-white/[0.06] py-4 font-semibold text-white/76 hover:bg-white/[0.11] transition">Use local profile instead</button>
+        </form>
+
+        <div class="mt-8 rounded-2xl border border-cyan-200/18 bg-cyan-200/[0.06] p-4 text-sm leading-6 text-cyan-50/68">
+          This prototype is for academic research and controlled demonstration. Login is a UI gate for the desktop workspace, not a public account system.
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMegaphone - VPN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#353437",
+                        "on-error": "#690005",
+                        "on-tertiary-container": "#00320e",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#1b1b1d",
+                        "secondary-fixed-dim": "#4cd6ff",
+                        "inverse-on-surface": "#303032",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#00531c",
+                        "surface-dim": "#131315",
+                        "inverse-surface": "#e4e2e4",
+                        "on-secondary": "#003543",
+                        "on-surface": "#e4e2e4",
+                        "surface-container": "#1f1f21",
+                        "on-secondary-fixed-variant": "#004e60",
+                        "surface-container-lowest": "#0e0e10",
+                        "text-primary": "#FFFFFF",
+                        "on-primary-container": "#00285c",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#00a741",
+                        "background": "#131315",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-secondary-container": "#00566b",
+                        "sidebar-bg": "rgba(44, 44, 46, 0.6)",
+                        "primary": "#adc6ff",
+                        "surface-container-high": "#2a2a2c",
+                        "tertiary": "#53e16f",
+                        "primary-container": "#4b8eff",
+                        "text-secondary": "#8E8E93",
+                        "glass-surface": "rgba(28, 28, 30, 0.7)",
+                        "on-surface-variant": "#c1c6d7",
+                        "surface": "#131315",
+                        "outline-variant": "#414755",
+                        "secondary-container": "#14d1ff",
+                        "surface-variant": "#353437",
+                        "outline": "#8b90a0",
+                        "status-online": "#34C759",
+                        "tertiary-fixed-dim": "#53e16f",
+                        "status-busy": "#FF3B30",
+                        "secondary": "#a6e6ff",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed": "#002107",
+                        "glass-border": "rgba(255, 255, 255, 0.12)",
+                        "on-tertiary": "#003911",
+                        "on-background": "#e4e2e4",
+                        "on-primary": "#002e69",
+                        "surface-bright": "#39393b",
+                        "tertiary-fixed": "#72fe88",
+                        "surface-tint": "#adc6ff",
+                        "inverse-primary": "#005bc1",
+                        "secondary-fixed": "#b7eaff",
+                        "on-primary-fixed": "#001a41",
+                        "on-secondary-fixed": "#001f28",
+                        "on-primary-fixed-variant": "#004493"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "topbar-height": "52px",
+                        "gutter-md": "16px",
+                        "sidebar-width": "300px",
+                        "stack-sm": "8px",
+                        "margin-page": "32px",
+                        "stack-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+                        "mono-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(76, 214, 255, 0.4);
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(76, 214, 255, 0.5);
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        .glass-panel {
+            background: rgba(28, 28, 30, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-text-primary min-h-screen flex flex-col antialiased selection:bg-secondary-fixed-dim selection:text-surface-container-lowest overflow-x-hidden relative">
+<!-- Atmospheric Background -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] mix-blend-screen"></div>
+<div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-secondary-fixed-dim/10 rounded-full blur-[100px] mix-blend-screen"></div>
+</div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-[52px] z-50 flex items-center justify-between px-gutter-md bg-glass-surface backdrop-blur-[20px] border-b border-glass-border shadow-sm">
+<div class="flex items-center gap-6">
+<span class="font-headline-xl text-headline-xl font-bold text-primary tracking-tighter">SMegaphone</span>
+<div class="hidden md:flex gap-4">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Register</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Project</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Chat</a>
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1" href="#">VPN</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Settings</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">About</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 p-1 rounded-DEFAULT"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span></button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 p-1 rounded-DEFAULT"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help</span></button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 mt-[52px] p-margin-page flex flex-col items-center max-w-7xl mx-auto w-full gap-8">
+<!-- Center Power Console -->
+<section class="flex flex-col items-center justify-center py-12 relative w-full max-w-2xl">
+<!-- Power Button -->
+<div class="relative w-48 h-48 flex items-center justify-center mb-8 group cursor-pointer">
+<!-- Pulse rings -->
+<div class="absolute inset-0 rounded-full border-2 border-status-online opacity-50 animate-pulse-ring"></div>
+<div class="absolute inset-2 rounded-full border border-status-online opacity-30 animate-pulse-ring" style="animation-delay: 0.5s"></div>
+<!-- Main Button -->
+<div class="w-32 h-32 rounded-full glass-panel border-status-online/50 flex items-center justify-center glow-cyan z-10 transition-transform duration-300 group-hover:scale-105 group-active:scale-95 shadow-[0_0_40px_rgba(52,199,89,0.2)] bg-surface-container/80">
+<span class="material-symbols-outlined text-[64px] text-status-online text-glow" style="font-variation-settings: 'FILL' 1;">power_settings_new</span>
+</div>
+</div>
+<div class="text-center">
+<h2 class="font-headline-lg text-headline-lg text-status-online text-glow mb-2">Protected</h2>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant flex items-center justify-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-online animate-pulse"></span>
+                    Connected to Zurich, CH-01
+                </p>
+</div>
+</section>
+<!-- Metrics Grid -->
+<section class="w-full grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="glass-panel rounded-lg p-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+<span class="font-label-caps text-label-caps">Upload</span>
+</div>
+<div class="font-headline-md text-headline-md text-text-primary">14.2 <span class="font-body-md text-body-md text-on-surface-variant">MB/s</span></div>
+</div>
+<div class="glass-panel rounded-lg p-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+<span class="font-label-caps text-label-caps">Download</span>
+</div>
+<div class="font-headline-md text-headline-md text-text-primary">105.8 <span class="font-body-md text-body-md text-on-surface-variant">MB/s</span></div>
+</div>
+<div class="glass-panel rounded-lg p-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">swap_vert</span>
+<span class="font-label-caps text-label-caps">Total Traffic</span>
+</div>
+<div class="font-headline-md text-headline-md text-text-primary">4.2 <span class="font-body-md text-body-md text-on-surface-variant">GB</span></div>
+</div>
+<div class="glass-panel rounded-lg p-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="font-label-caps text-label-caps">Duration</span>
+</div>
+<div class="font-mono-sm text-mono-sm text-secondary-fixed-dim text-lg">04:12:45</div>
+</div>
+</section>
+<!-- Configuration Layout -->
+<div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+<!-- Proxy Mode Selector -->
+<section class="col-span-1 glass-panel rounded-xl p-6 flex flex-col gap-4">
+<h3 class="font-headline-md text-headline-md text-text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined">route</span>
+                    Routing Mode
+                </h3>
+<div class="flex flex-col gap-2">
+<label class="flex items-center p-3 rounded-lg border border-glass-border bg-white/5 cursor-pointer hover:bg-white/10 transition-colors">
+<input class="form-radio text-primary bg-surface-container border-outline focus:ring-primary focus:ring-offset-background h-4 w-4" name="proxy_mode" type="radio"/>
+<span class="ml-3 font-body-md text-body-md text-text-primary flex-1">Global</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">public</span>
+</label>
+<label class="flex items-center p-3 rounded-lg border border-primary/50 bg-primary/10 cursor-pointer shadow-[0_0_15px_rgba(173,198,255,0.1)] transition-colors">
+<input checked="" class="form-radio text-primary bg-surface-container border-outline focus:ring-primary focus:ring-offset-background h-4 w-4" name="proxy_mode" type="radio"/>
+<span class="ml-3 font-body-md text-body-md text-primary flex-1">Rule-based</span>
+<span class="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+</label>
+<label class="flex items-center p-3 rounded-lg border border-glass-border bg-white/5 cursor-pointer hover:bg-white/10 transition-colors">
+<input class="form-radio text-primary bg-surface-container border-outline focus:ring-primary focus:ring-offset-background h-4 w-4" name="proxy_mode" type="radio"/>
+<span class="ml-3 font-body-md text-body-md text-text-primary flex-1">Direct</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">arrow_forward</span>
+</label>
+<label class="flex items-center p-3 rounded-lg border border-glass-border bg-white/5 cursor-pointer hover:bg-white/10 transition-colors mt-2 border-secondary-fixed-dim/30">
+<input class="form-radio text-secondary-fixed-dim bg-surface-container border-outline focus:ring-secondary-fixed-dim focus:ring-offset-background h-4 w-4" name="proxy_mode" type="radio"/>
+<span class="ml-3 font-body-md text-body-md text-secondary-fixed-dim flex-1">Research Tunnel</span>
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[18px]">science</span>
+</label>
+</div>
+</section>
+<!-- Server List -->
+<section class="col-span-1 md:col-span-2 glass-panel rounded-xl p-6 flex flex-col gap-4">
+<div class="flex items-center justify-between mb-2">
+<h3 class="font-headline-md text-headline-md text-text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">dns</span>
+                        Node Selection
+                    </h3>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container-highest border border-glass-border rounded-full py-1.5 pl-9 pr-4 text-body-md text-text-primary placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Filter nodes..." type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
+<!-- Active Node -->
+<div class="glass-panel rounded-lg p-4 border-l-4 border-l-status-online border-t border-b border-r border-status-online/30 bg-surface-container/50 cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇨🇭</span>
+<span class="font-headline-md text-headline-md text-text-primary">Zurich, CH-01</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-status-online bg-status-online/10 px-2 py-0.5 rounded">12ms</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps">Research Net / Secure</span>
+<span class="material-symbols-outlined text-[16px] text-status-online">check_circle</span>
+</div>
+</div>
+<!-- Available Node -->
+<div class="glass-panel rounded-lg p-4 border border-glass-border cursor-pointer hover:bg-white/5 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇺🇸</span>
+<span class="font-headline-md text-headline-md text-text-primary">New York, US-04</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-secondary-fixed-dim bg-secondary-fixed-dim/10 px-2 py-0.5 rounded">84ms</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps">Global / High Speed</span>
+</div>
+</div>
+<!-- Available Node -->
+<div class="glass-panel rounded-lg p-4 border border-glass-border cursor-pointer hover:bg-white/5 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇯🇵</span>
+<span class="font-headline-md text-headline-md text-text-primary">Tokyo, JP-02</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-secondary-fixed-dim bg-secondary-fixed-dim/10 px-2 py-0.5 rounded">115ms</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps">Global / High Speed</span>
+</div>
+</div>
+<!-- Busy Node -->
+<div class="glass-panel rounded-lg p-4 border border-glass-border opacity-70 cursor-not-allowed">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇬🇧</span>
+<span class="font-headline-md text-headline-md text-on-surface-variant">London, UK-01</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-status-busy bg-status-busy/10 px-2 py-0.5 rounded">999ms</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-status-busy flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">warning</span> Offline</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</body></html>

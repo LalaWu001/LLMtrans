@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEON_ACADEMY - Launch Your Coding Career</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;600;800&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            font-feature-settings: 'liga';
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#7befb6",
+                        "surface-tint": "#68dca5",
+                        "on-tertiary-fixed-variant": "#723618",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#acb8b3",
+                        "on-secondary-fixed": "#141e1b",
+                        "on-primary": "#003823",
+                        "tertiary-container": "#ffa882",
+                        "on-tertiary-fixed": "#360f00",
+                        "secondary-fixed": "#dae5e0",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "tertiary": "#ffcebb",
+                        "inverse-primary": "#006c48",
+                        "on-error": "#690005",
+                        "surface": "#101413",
+                        "error": "#ffb4ab",
+                        "on-secondary": "#28332f",
+                        "background": "#101413",
+                        "surface-variant": "#313634",
+                        "on-secondary-fixed-variant": "#3e4945",
+                        "on-tertiary": "#552004",
+                        "on-primary-container": "#005839",
+                        "secondary-fixed-dim": "#bec9c4",
+                        "primary-fixed": "#85f9c0",
+                        "secondary-container": "#3e4945",
+                        "on-background": "#e0e3e1",
+                        "surface-container-high": "#262b2a",
+                        "outline": "#87948b",
+                        "on-tertiary-container": "#793b1d",
+                        "on-primary-fixed": "#002113",
+                        "surface-container-low": "#181c1b",
+                        "primary-fixed-dim": "#68dca5",
+                        "on-surface-variant": "#bccac0",
+                        "primary-container": "#5ed29c",
+                        "surface-container": "#1c201f",
+                        "on-surface": "#e0e3e1",
+                        "error-container": "#93000a",
+                        "secondary": "#bec9c4",
+                        "surface-bright": "#363a39",
+                        "surface-container-lowest": "#0b0f0e",
+                        "on-primary-fixed-variant": "#005235",
+                        "outline-variant": "#3d4a42",
+                        "surface-container-highest": "#313634",
+                        "inverse-surface": "#e0e3e1",
+                        "surface-dim": "#101413",
+                        "inverse-on-surface": "#2d3130"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "grid-line-color": "rgba(94, 210, 156, 0.08)",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "grid-line-width": "1px",
+                        "margin-mobile": "20px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "emphasis-italic": ["Instrument Serif"],
+                        "eyebrow-sm": ["Plus Jakarta Sans"],
+                        "display-xl": ["Inter"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "emphasis-italic": ["20px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "eyebrow-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "display-xl": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "label-caps": ["11px", { "lineHeight": "12px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- HLS.js for video streaming -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md overflow-x-hidden selection:bg-primary/30 selection:text-primary">
+<!-- TopAppBar -->
+<header class="bg-surface/10 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-grid-line-color shadow-none">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-2 cursor-pointer active:scale-95 text-primary hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div class="font-display-xl text-primary tracking-tighter uppercase text-xl md:text-2xl font-black">
+                NEON_ACADEMY
+            </div>
+<button class="flex items-center gap-2 cursor-pointer active:scale-95 text-on-surface-variant hover:text-primary transition-colors duration-300" id="menu-toggle">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<!-- NavigationDrawer (Overlay) -->
+<div class="fixed inset-0 z-[60] backdrop-brightness-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300" id="nav-drawer">
+<div class="bg-background/95 backdrop-blur-[40px] border-l border-grid-line-color shadow-2xl flex flex-col p-8 w-80 h-full transform translate-x-full transition-transform duration-300 ease-in-out" id="nav-drawer-content">
+<div class="flex justify-between items-center mb-12 border-b border-grid-line-color pb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">NAVIGATION</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors" id="close-drawer">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container/20 text-primary rounded-xl font-label-caps text-label-caps hover:translate-x-2 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">code</span>
+                    Curriculum
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface hover:bg-surface-variant/10 rounded-xl font-label-caps text-label-caps hover:translate-x-2 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+                    Bootcamps
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface hover:bg-surface-variant/10 rounded-xl font-label-caps text-label-caps hover:translate-x-2 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">terminal</span>
+                    Sandbox
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface hover:bg-surface-variant/10 rounded-xl font-label-caps text-label-caps hover:translate-x-2 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">business</span>
+                    Enterprise
+                </a>
+</nav>
+</div>
+</div>
+<!-- Main Content: Hero Section -->
+<main class="flex-grow relative w-full min-h-screen flex flex-col justify-end">
+<!-- Background Video -->
+<div class="absolute inset-0 z-0 w-full h-full overflow-hidden bg-surface-container-lowest">
+<video autoplay="" class="w-full h-full object-cover opacity-60 mix-blend-screen" id="hero-video" loop="" muted="" playsinline=""></video>
+<!-- Gradients for depth and readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent z-10"></div>
+<div class="absolute inset-0 bg-surface/20 mix-blend-overlay z-10"></div>
+</div>
+<!-- Floating Glass Card -->
+<div class="absolute top-32 md:top-48 right-margin-mobile md:right-margin-desktop z-20 w-[200px] bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 mix-blend-luminosity shadow-inner transform -translate-y-12">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-2">[ 2025 ]</div>
+<div class="font-body-md text-body-md text-on-surface leading-tight mb-2">
+                Taught by <br/><span class="font-emphasis-italic text-emphasis-italic text-primary">Industry</span><br/> Professionals
+            </div>
+<div class="text-[11px] text-on-surface-variant/70 leading-relaxed">
+                Elite curriculum designed for immediate impact.
+            </div>
+</div>
+<!-- Hero Content -->
+<div class="relative z-20 px-margin-mobile md:px-margin-desktop pb-24 md:pb-32 max-w-[800px]">
+<div class="mb-4 inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+<span class="font-label-caps text-label-caps text-primary tracking-widest uppercase">Career-Ready Curriculum</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface uppercase mb-6 drop-shadow-lg">
+                LAUNCH YOUR<br/>CODING CAREER<span class="text-primary animate-pulse">.</span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[512px] opacity-80 mb-10 leading-relaxed">
+                Master in-demand coding skills through immersive, project-based learning. Enter the matrix of modern development and engineer your future in tech.
+            </p>
+<button class="group relative inline-flex items-center gap-3 bg-primary text-black px-8 py-4 rounded-full font-body-md font-extrabold hover:bg-primary-container hover:shadow-[0_0_30px_rgba(123,239,182,0.4)] transition-all duration-300 overflow-hidden">
+<span class="relative z-10">Get Started</span>
+<span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+<div class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out skew-x-12"></div>
+</button>
+</div>
+<!-- Structural Grid Lines -->
+<div class="absolute bottom-0 left-0 w-full h-[1px] bg-grid-line-color z-20"></div>
+<div class="absolute top-0 left-margin-mobile w-[1px] h-full bg-grid-line-color z-0 hidden md:block"></div>
+<div class="absolute top-0 right-margin-mobile w-[1px] h-full bg-grid-line-color z-0 hidden md:block"></div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full border-t border-grid-line-color z-30 relative">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-mobile md:px-margin-desktop py-12">
+<div class="font-label-caps text-label-caps text-on-surface">
+                © 2024 NEON_ACADEMY. ENGINEERED FOR VISIONARIES.
+            </div>
+<div class="flex flex-wrap gap-6 md:justify-end">
+<a class="font-body-md text-body-md text-outline hover:text-primary underline-offset-4 hover:underline transition-all" href="#">Documentation</a>
+<a class="font-body-md text-body-md text-outline hover:text-primary underline-offset-4 hover:underline transition-all" href="#">API Reference</a>
+<a class="font-body-md text-body-md text-outline hover:text-primary underline-offset-4 hover:underline transition-all" href="#">Status</a>
+<a class="font-body-md text-body-md text-outline hover:text-primary underline-offset-4 hover:underline transition-all" href="#">Privacy</a>
+</div>
+</div>
+</footer>
+<!-- Scripts -->
+<script>
+        // Setup HLS Video Streaming
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('hero-video');
+            const videoSrc = 'https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8';
+
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                    capLevelToPlayerSize: true,
+                    maxBufferLength: 30
+                });
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Autoplay prevented:", e));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // For Safari
+                video.src = videoSrc;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log("Autoplay prevented:", e));
+                });
+            }
+        });
+
+        // Setup Drawer Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeDrawer = document.getElementById('close-drawer');
+        const navDrawer = document.getElementById('nav-drawer');
+        const navDrawerContent = document.getElementById('nav-drawer-content');
+
+        function openMenu() {
+            navDrawer.classList.remove('opacity-0', 'pointer-events-none');
+            navDrawerContent.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeMenu() {
+            navDrawerContent.classList.add('translate-x-full');
+            navDrawer.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        menuToggle.addEventListener('click', openMenu);
+        closeDrawer.addEventListener('click', closeMenu);
+        
+        // Close when clicking outside content
+        navDrawer.addEventListener('click', (e) => {
+            if (e.target === navDrawer) closeMenu();
+        });
+    </script>
+</body></html>

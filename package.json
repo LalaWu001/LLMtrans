@@ -1,0 +1,83 @@
+{
+  "name": "llmtrans",
+  "description": "Desktop client for experimental AI-mediated communication.",
+  "author": "Nankai University llmtrans Team",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview --host 127.0.0.1",
+    "electron:dir": "npm run build && electron-builder --win dir --x64",
+    "electron:build": "npm run build && electron-builder --win portable --x64"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "latest",
+    "@vitejs/plugin-react": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "electron": "^42.3.3",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "edu.nankai.llmtrans",
+    "productName": "llmtrans",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/icon.ico",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "Core_Architecture",
+        "to": "Core_Architecture",
+        "filter": [
+          "cmd/1.py",
+          "cmd_reserve/1.py",
+          "cookies/cookies.json",
+          "test/test5.txt"
+        ]
+      }
+    ],
+    "extraFiles": [
+      {
+        "from": "scripts/install-dependencies.cmd",
+        "to": "安装运行环境.cmd"
+      },
+      {
+        "from": "scripts/install-dependencies.ps1",
+        "to": "install-dependencies.ps1"
+      }
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "llmtrans.exe"
+    },
+    "portable": {
+      "artifactName": "llmtrans.exe"
+    }
+  }
+}
