@@ -2,6 +2,7 @@
 
 ## 2026-06-09
 
+- Added a shared invitation-code prompt to every showcase download link, including invalid-code feedback and the author's application email.
 - Added repository-safe `.gitignore`, public README setup instructions, and sanitized Cookie/conversation configuration templates.
 - Replaced Team page placeholder graphics with `avatar/teacher.jpg`, `avatar/student1.jpg`, and `avatar/student2.jpg`.
 - Rebalanced the Team layout with a large full-color teacher portrait and consistent full-color image/text columns for student profiles.
