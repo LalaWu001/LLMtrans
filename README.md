@@ -127,7 +127,7 @@ release/llmtrans.exe
 最新版本固定下载地址：
 
 ```text
-https://github.com/LalaWu001/LLMtrans/releases/latest/download/llmtrans.exe
+https://github.com/LalaWu001/LLMtrans/releases/latest/download/release_WINx64.zip
 ```
 
 网站下载按钮可以使用该地址，从而自动指向最新正式版本。
@@ -166,4 +166,3 @@ git diff --cached --stat
 ## 使用范围
 
 本项目目前是学术研究与原型验证项目。请仅在授权环境中使用，并妥善保管个人 Cookie、会话信息和本地数据。
-
