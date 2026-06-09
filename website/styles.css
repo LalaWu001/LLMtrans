@@ -76,6 +76,21 @@ button {
   z-index: -3;
   object-fit: cover;
   background: #050505;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.page-video::-webkit-media-controls,
+.page-video::-webkit-media-controls-enclosure,
+.page-video::-webkit-media-controls-panel,
+.page-video::-webkit-media-controls-play-button,
+.page-video::-webkit-media-controls-start-playback-button,
+.page-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0;
 }
 
 .page-shade {

@@ -23,6 +23,44 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") setDrawer(false);
 });
 
+const backgroundVideos = [...document.querySelectorAll(".page-video")];
+
+function prepareBackgroundVideo(video) {
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+  video.controls = false;
+  video.disablePictureInPicture = true;
+  video.setAttribute("muted", "");
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.removeAttribute("controls");
+}
+
+function playBackgroundVideos() {
+  backgroundVideos.forEach((video) => {
+    prepareBackgroundVideo(video);
+    if (!video.currentSrc && !video.src) return;
+    video.play().catch(() => {});
+  });
+}
+
+backgroundVideos.forEach((video) => {
+  prepareBackgroundVideo(video);
+  if (video.readyState >= 2) {
+    video.play().catch(() => {});
+  } else {
+    video.addEventListener("loadeddata", () => video.play().catch(() => {}), {once: true});
+  }
+});
+
+window.addEventListener("pageshow", playBackgroundVideos);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) playBackgroundVideos();
+});
+document.addEventListener("touchstart", playBackgroundVideos, {passive: true, once: true});
+document.addEventListener("pointerdown", playBackgroundVideos, {passive: true, once: true});
+
 const downloadUrl = "https://github.com/LalaWu001/LLMtrans/releases/latest/download/release_WINx64.zip";
 const downloadInviteCode = "962638";
 const downloadDialog = document.createElement("dialog");

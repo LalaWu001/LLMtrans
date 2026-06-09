@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-06-10
+
+- Improved mobile background video playback with inline autoplay attributes, hidden WebKit controls, non-interactive video layers, and playback retries after page visibility or first touch.
+
 ## 2026-06-09
 
 - Added a shared invitation-code prompt to every showcase download link, including invalid-code feedback and the author's application email.

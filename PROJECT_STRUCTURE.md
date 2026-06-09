@@ -19,7 +19,7 @@
 - `scripts/install-dependencies.cmd`: Double-click launcher distributed as `安装运行环境.cmd`.
 - `scripts/install-dependencies.ps1`: Installs or verifies Python 3.12, Playwright, chardet, and Playwright Chromium for the current Windows user.
 - `docs/`: Project planning and design documents.
-- `website/`: Standalone four-page project showcase. `index.html`, `conversation.html`, `vpn.html`, and `team.html` share a compact top-left navigation, independent top-right download action, mobile drawer, unavailable-feature notices, and bilingual product copy while retaining page-specific background videos. Shared `script.js` intercepts every client download link and opens the invitation-code prompt; `styles.css` contains its responsive editorial styling. `IMG_5716.PNG` is the unified site icon.
+- `website/`: Standalone four-page project showcase. `index.html`, `conversation.html`, `vpn.html`, and `team.html` share a compact top-left navigation, independent top-right download action, mobile drawer, unavailable-feature notices, and bilingual product copy while retaining page-specific background videos. Shared `script.js` intercepts every client download link, opens the invitation-code prompt, and retries muted inline background playback on mobile lifecycle/user events; `styles.css` contains responsive editorial styling and hides native WebKit video controls. `IMG_5716.PNG` is the unified site icon.
 - `PROJECT_STRUCTURE.md`: Maintains project file and module responsibilities.
 - `CHANGELOG.md`: Maintains notable project changes.
 - `README.md`: Public setup, local secret configuration, development, website preview, and GitHub Releases instructions.
