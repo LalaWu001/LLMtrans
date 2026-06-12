@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {createContext, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Activity,
   ArrowDown,
@@ -15,6 +15,7 @@ import {
   Gauge,
   Info,
   Lock,
+  Languages,
   LogOut,
   MessageSquare,
   MoreHorizontal,
@@ -40,7 +41,29 @@ type AuthMode = 'login' | 'register';
 type ThemeChoice = 'Dark Glass' | 'Light' | 'High Contrast' | 'Blue Research';
 type ProxyMode = 'Global' | 'Rule-based' | 'Direct' | 'Research Tunnel';
 type AiProvider = 'Doubao' | 'Other AI' | 'Custom Provider';
+type Language = 'zh' | 'en';
 const THEME_STORAGE_KEY = 'llmtrans-theme';
+const LANGUAGE_STORAGE_KEY = 'llmtrans-language';
+
+const LanguageContext = createContext<{
+  language: Language;
+  toggleLanguage: () => void;
+}>({
+  language: 'zh',
+  toggleLanguage: () => {},
+});
+
+function loadLanguage(): Language {
+  return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'en' ? 'en' : 'zh';
+}
+
+function useCopy() {
+  const context = useContext(LanguageContext);
+  return {
+    ...context,
+    t: (zh: string, en: string) => context.language === 'zh' ? zh : en,
+  };
+}
 
 function loadThemeChoice(): ThemeChoice {
   const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
@@ -78,6 +101,7 @@ export default function App() {
   const [avatarUrl, setAvatarUrl] = useState('');
   const [backgroundUrl, setBackgroundUrl] = useState('');
   const [themeChoice, setThemeChoice] = useState<ThemeChoice>(loadThemeChoice);
+  const [language, setLanguage] = useState<Language>(loadLanguage);
   const [aiProvider, setAiProvider] = useState<AiProvider>('Doubao');
   const [proxyMode, setProxyMode] = useState<ProxyMode>('Rule-based');
   const [vpnConnected, setVpnConnected] = useState(true);
@@ -163,7 +187,16 @@ export default function App() {
     window.localStorage.setItem(THEME_STORAGE_KEY, themeChoice);
   }, [themeChoice]);
 
+  useEffect(() => {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+  }, [language]);
+
   return (
+    <LanguageContext.Provider value={{
+      language,
+      toggleLanguage: () => setLanguage((current) => current === 'zh' ? 'en' : 'zh'),
+    }}>
     <div className={`app-shell theme-${themeChoice.toLowerCase().replaceAll(' ', '-')}`}>
       <GlassFilter />
       <div className="ambient-grid" />
@@ -266,6 +299,7 @@ export default function App() {
         </>
       )}
     </div>
+    </LanguageContext.Provider>
   );
 }
 
@@ -311,6 +345,7 @@ function AuthGate({
   nickname: string;
   onNicknameChange: (name: string) => void;
 }) {
+  const {language, toggleLanguage, t} = useCopy();
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [accountName, setAccountName] = useState('');
   const [password, setPassword] = useState('');
@@ -340,72 +375,75 @@ function AuthGate({
   return (
     <main className="auth-page" style={backgroundUrl ? ({'--login-image': `url(${backgroundUrl})`} as React.CSSProperties) : undefined}>
       <div className="auth-image-layer" />
+      <button className="auth-language-toggle" onClick={toggleLanguage} aria-label={t('切换为英文', 'Switch to Chinese')}>
+        <Languages size={17} /> {language === 'zh' ? 'EN' : '中'}
+      </button>
       <section className="auth-layout">
         <LiquidGlass className="auth-brand-panel" strong>
           <div className="brand-lockup" title="版权所有南开大学llmtrans团队">
             <div className="brand-icon"><MessageSquare size={25} /></div>
             <div>
               <div className="brand-title">llmtrans</div>
-              <div className="eyebrow">Research Desktop Client</div>
+              <div className="eyebrow">{t('研究型桌面客户端', 'Research Desktop Client')}</div>
             </div>
           </div>
           <div className="auth-copy">
-            <div className="eyebrow cyan">Local identity gateway</div>
-            <h1>Sign in before entering the workspace.</h1>
-            <p>The project, chat, VPN, settings, and about pages are available only after login or local profile registration.</p>
+            <div className="eyebrow cyan">{t('本地身份入口', 'Local identity gateway')}</div>
+            <h1>{t('登录后进入 llmtrans 工作空间。', 'Sign in before entering the llmtrans workspace.')}</h1>
+            <p>{t('完成登录或注册本地身份后，即可使用项目介绍、对话通信、VPN、设置与团队页面。', 'Sign in or register a local identity to access the project, chat, VPN, settings, and team pages.')}</p>
           </div>
           <div className="auth-stats">
-            <MiniStat label="Mode" value="Desktop" />
-            <MiniStat label="Scope" value="Academic" />
-            <MiniStat label="Status" value="Ready" green />
+            <MiniStat label={t('模式', 'Mode')} value={t('桌面端', 'Desktop')} />
+            <MiniStat label={t('定位', 'Scope')} value={t('学术研究', 'Academic')} />
+            <MiniStat label={t('状态', 'Status')} value={t('就绪', 'Ready')} green />
           </div>
         </LiquidGlass>
 
         <LiquidGlass className="auth-form-panel" strong>
           <div className="auth-tabs">
-            <button className={mode === 'login' ? 'active' : ''} onClick={() => onModeChange('login')}>Login</button>
-            <button className={mode === 'register' ? 'active' : ''} onClick={() => onModeChange('register')}>Register</button>
+            <button className={mode === 'login' ? 'active' : ''} onClick={() => onModeChange('login')}>{t('登录', 'Login')}</button>
+            <button className={mode === 'register' ? 'active' : ''} onClick={() => onModeChange('register')}>{t('注册', 'Register')}</button>
           </div>
-          <h2>{mode === 'login' ? 'Welcome back' : 'Create local profile'}</h2>
-          <p className="muted">{mode === 'login' ? 'Use your local profile to enter the desktop workspace.' : 'Register a local identity for this demo client.'}</p>
+          <h2>{mode === 'login' ? t('欢迎回来', 'Welcome back') : t('创建本地身份', 'Create local profile')}</h2>
+          <p className="muted">{mode === 'login' ? t('使用本地账户进入桌面工作空间。', 'Use your local profile to enter the desktop workspace.') : t('为 llmtrans 客户端注册一个本地身份。', 'Register a local identity for the llmtrans client.')}</p>
           <div className="auth-form">
             {mode === 'register' && (
               <div className="avatar-row">
                 <AvatarPreview avatarUrl="" label={nickname} />
                 <div>
-                  <div className="field-label">Profile avatar</div>
-                  <div className="muted small">Avatar upload is configured later in Settings.</div>
+                  <div className="field-label">{t('个人头像', 'Profile avatar')}</div>
+                  <div className="muted small">{t('头像可在进入工作空间后于设置中上传。', 'Upload an avatar later in Settings.')}</div>
                 </div>
               </div>
             )}
             <label>
-              <span className="field-label">{mode === 'login' ? 'Account name' : 'Nickname'}</span>
+              <span className="field-label">{mode === 'login' ? t('账户名', 'Account name') : t('昵称', 'Nickname')}</span>
               {mode === 'login'
-                ? <input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder="e.g. researcher-a" />
-                : <input value={nickname} onChange={(event) => onNicknameChange(event.target.value)} placeholder="e.g. Researcher A" />}
+                ? <input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder={t('例如：researcher-a', 'e.g. researcher-a')} />
+                : <input value={nickname} onChange={(event) => onNicknameChange(event.target.value)} placeholder={t('例如：研究员 A', 'e.g. Researcher A')} />}
             </label>
             {mode === 'register' && (
               <label>
-                <span className="field-label">Account name</span>
-                <input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder="Local account name" />
+                <span className="field-label">{t('账户名', 'Account name')}</span>
+                <input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder={t('本地账户名', 'Local account name')} />
               </label>
             )}
             <label>
-              <span className="field-label">Password</span>
-              <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Enter password" />
+              <span className="field-label">{t('密码', 'Password')}</span>
+              <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder={t('请输入密码', 'Enter password')} />
             </label>
             {mode === 'register' && (
               <label>
-                <span className="field-label">Confirm password</span>
-                <input value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} type="password" placeholder="Confirm password" />
+                <span className="field-label">{t('确认密码', 'Confirm password')}</span>
+                <input value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} type="password" placeholder={t('请再次输入密码', 'Confirm password')} />
               </label>
             )}
             <div className="background-picker">
               <div>
-                <div className="field-label">Login background image</div>
-                <div className="muted small">Optional. This affects only the login page.</div>
+                <div className="field-label">{t('登录背景图片', 'Login background image')}</div>
+                <div className="muted small">{t('可选，仅影响登录注册页面。', 'Optional. This affects only the login page.')}</div>
               </div>
-              <button onClick={() => fileRef.current?.click()}><FolderOpen size={16} /> Choose</button>
+              <button onClick={() => fileRef.current?.click()}><FolderOpen size={16} /> {t('选择', 'Choose')}</button>
               <input
                 ref={fileRef}
                 type="file"
@@ -419,10 +457,9 @@ function AuthGate({
             </div>
             {error && <div className="auth-notice error-notice"><Info size={16} /> {error}</div>}
             <button className="primary-action" disabled={submitting} onClick={submit}>
-              {submitting ? 'Please wait...' : mode === 'login' ? 'Enter llmtrans' : 'Create and enter'}
+              {submitting ? t('请稍候...', 'Please wait...') : mode === 'login' ? t('进入 llmtrans', 'Enter llmtrans') : t('创建并进入', 'Create and enter')}
             </button>
           </div>
-          <div className="auth-notice"><Info size={16} /> Academic research prototype. This login gate is part of the desktop UI demo.</div>
         </LiquidGlass>
       </section>
     </main>
@@ -444,12 +481,13 @@ function TopNav({
   themeChoice: ThemeChoice;
   onThemeToggle: () => void;
 }) {
+  const {language, toggleLanguage, t} = useCopy();
   const nav: Array<{id: Page; label: string}> = [
-    {id: 'project', label: 'Project'},
-    {id: 'chat', label: 'Chat'},
+    {id: 'project', label: t('项目', 'Project')},
+    {id: 'chat', label: t('对话', 'Chat')},
     {id: 'vpn', label: 'VPN'},
-    {id: 'settings', label: 'Settings'},
-    {id: 'about', label: 'About'},
+    {id: 'settings', label: t('设置', 'Settings')},
+    {id: 'about', label: t('团队', 'Team')},
   ];
   return (
     <nav className="top-nav">
@@ -465,17 +503,20 @@ function TopNav({
         </div>
       </div>
       <div className="nav-actions">
+        <button className="language-toggle" onClick={toggleLanguage} title={t('切换为英文', 'Switch to Chinese')}>
+          <Languages size={17} /> {language === 'zh' ? 'EN' : '中'}
+        </button>
         <button
           className="icon-button theme-toggle"
-          title={themeChoice === 'Light' ? 'Switch to dark mode' : 'Switch to light mode'}
-          aria-label={themeChoice === 'Light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          title={themeChoice === 'Light' ? t('切换为暗色模式', 'Switch to dark mode') : t('切换为亮色模式', 'Switch to light mode')}
+          aria-label={themeChoice === 'Light' ? t('切换为暗色模式', 'Switch to dark mode') : t('切换为亮色模式', 'Switch to light mode')}
           onClick={onThemeToggle}
         >
           {themeChoice === 'Light' ? <Moon size={20} /> : <Sun size={20} />}
         </button>
         <button className="icon-button"><UserCircle size={20} /></button>
         <button className="icon-button"><CircleHelp size={20} /></button>
-        <button className="icon-button" title="Log out" aria-label="Log out" onClick={onLogout}><LogOut size={20} /></button>
+        <button className="icon-button" title={t('退出登录', 'Log out')} aria-label={t('退出登录', 'Log out')} onClick={onLogout}><LogOut size={20} /></button>
         <div className="nav-user">{nickname.slice(0, 1).toUpperCase()}</div>
       </div>
     </nav>
@@ -483,40 +524,41 @@ function TopNav({
 }
 
 function ProjectPage({onOpenChat}: {onOpenChat: () => void}) {
+  const {t} = useCopy();
   return (
     <PageFrame>
       <header className="page-header">
-        <div className="eyebrow cyan">llmtrans Project Hub</div>
-        <h1>A desktop chat client for experimental AI-mediated communication research.</h1>
-        <p>Designed as a local research console with shared conversation channels, identity protocol metadata, and desktop-first workflows.</p>
+        <div className="eyebrow cyan">{t('llmtrans 项目中心', 'llmtrans Project Hub')}</div>
+        <h1>{t('面向 AI 中介通信研究的桌面对话客户端。', 'A desktop chat client for experimental AI-mediated communication research.')}</h1>
+        <p>{t('通过统一的桌面工作空间组织共享对话、身份信息与通信流程，让研究团队能够更直观地观察和体验跨端交流。', 'A unified desktop workspace for shared conversations, identity information, and communication workflows across multiple clients.')}</p>
       </header>
       <div className="project-grid">
         <LiquidGlass className="project-feature">
           <MessageSquare />
-          <h2>Shared Conversation Channel</h2>
-          <p>Multiple local clients use the same AI conversation as a message relay while the UI presents a conventional chat experience.</p>
+          <h2>{t('共享对话通道', 'Shared Conversation Channel')}</h2>
+          <p>{t('多个本地客户端可以围绕同一会话进行交流，同时保留清晰、熟悉的即时通信体验。', 'Multiple local clients can communicate through one shared conversation while retaining a clear, familiar chat experience.')}</p>
         </LiquidGlass>
         <LiquidGlass className="project-feature">
           <Shield />
-          <h2>Local Identity Protocol</h2>
-          <p>Each desktop client attaches a local sender ID, message ID, nickname, and timestamp before sending through the channel.</p>
+          <h2>{t('本地身份标识', 'Local Identity')}</h2>
+          <p>{t('每位参与者都拥有独立的本地身份与昵称，使不同窗口和设备中的消息来源保持清晰可辨。', 'Each participant has an independent local identity and nickname so message ownership remains clear across windows and devices.')}</p>
         </LiquidGlass>
         <LiquidGlass className="project-feature wide">
           <Plug />
-          <h2>Desktop Client Workflow</h2>
+          <h2>{t('桌面客户端流程', 'Desktop Client Workflow')}</h2>
           <div className="workflow">
-            <WorkflowStep label="Desktop UI" icon={<MessageSquare size={18} />} />
-            <WorkflowStep label="Local Bridge" icon={<Route size={18} />} />
-            <WorkflowStep label="Python Workers" icon={<Bot size={18} />} />
-            <WorkflowStep label="Shared AI Conversation" icon={<Sparkles size={18} />} />
+            <WorkflowStep label={t('桌面界面', 'Desktop UI')} icon={<MessageSquare size={18} />} />
+            <WorkflowStep label={t('本地连接', 'Local Bridge')} icon={<Route size={18} />} />
+            <WorkflowStep label={t('通信服务', 'Communication Service')} icon={<Bot size={18} />} />
+            <WorkflowStep label={t('共享 AI 对话', 'Shared AI Conversation')} icon={<Sparkles size={18} />} />
           </div>
         </LiquidGlass>
         <LiquidGlass className="status-card" strong>
-          <h2>System Status</h2>
-          <StatusRow label="Core Routing Engine" value="ONLINE" />
-          <StatusRow label="Local Bridge Workers" value="DEMO" />
-          <StatusRow label="UI Prototype" value="ACTIVE" />
-          <button className="primary-action inline" onClick={onOpenChat}>Open Chat Workspace</button>
+          <h2>{t('系统状态', 'System Status')}</h2>
+          <StatusRow label={t('核心通信服务', 'Core Communication Service')} value={t('在线', 'ONLINE')} />
+          <StatusRow label={t('本地连接服务', 'Local Bridge Service')} value={t('就绪', 'READY')} />
+          <StatusRow label={t('桌面工作空间', 'Desktop Workspace')} value={t('可用', 'ACTIVE')} />
+          <button className="primary-action inline" onClick={onOpenChat}>{t('打开对话工作台', 'Open Chat Workspace')}</button>
         </LiquidGlass>
       </div>
     </PageFrame>
@@ -554,6 +596,7 @@ function ChatPage({
   onStop: () => Promise<void>;
   onSend: (text: string) => Promise<void>;
 }) {
+  const {t} = useCopy();
   const [draft, setDraft] = useState('');
   const [conversationName, setConversationName] = useState('');
   const [cookieFile, setCookieFile] = useState('');
@@ -579,24 +622,24 @@ function ChatPage({
         <LiquidGlass className="conversation-create" strong>
           <div className="sidebar-title-row">
             <div>
-              <h2>Conversations</h2>
-              <p>Create a channel from local files.</p>
+              <h2>{t('会话', 'Conversations')}</h2>
+              <p>{t('使用本地文件创建通信会话。', 'Create a channel from local files.')}</p>
             </div>
             <button className="round-add" onClick={() => onCreateConversation({name: conversationName, cookieFile, dialogFile})}>+</button>
           </div>
           <button className="file-chip" onClick={async () => {
             const selected = await window.llmtrans.files.chooseCookie();
             if (selected) setCookieFile(selected);
-          }}><Cookie size={16} /><span><b>Cookies file</b>{cookieFile || 'Not selected'}</span></button>
+          }}><Cookie size={16} /><span><b>{t('Cookie 文件', 'Cookies file')}</b>{cookieFile || t('未选择', 'Not selected')}</span></button>
           <button className="file-chip" onClick={async () => {
             const selected = await window.llmtrans.files.chooseDialogue();
             if (selected) setDialogFile(selected);
-          }}><FileText size={16} /><span><b>Conversation file</b>{dialogFile || 'Not selected'}</span></button>
-          <input value={conversationName} onChange={(event) => setConversationName(event.target.value)} placeholder="Conversation name" />
-          <button className="primary-action small" onClick={() => onCreateConversation({name: conversationName, cookieFile, dialogFile})}>Create Conversation</button>
+          }}><FileText size={16} /><span><b>{t('对话文件', 'Conversation file')}</b>{dialogFile || t('未选择', 'Not selected')}</span></button>
+          <input value={conversationName} onChange={(event) => setConversationName(event.target.value)} placeholder={t('会话名称', 'Conversation name')} />
+          <button className="primary-action small" onClick={() => onCreateConversation({name: conversationName, cookieFile, dialogFile})}>{t('创建会话', 'Create Conversation')}</button>
         </LiquidGlass>
         <div className="conversation-list">
-          <div className="section-label">Conversation List</div>
+          <div className="section-label">{t('会话列表', 'Conversation List')}</div>
           {conversations.map((item) => (
             <button key={item.id} className={`conversation-item ${item.id === activeConversation?.id ? 'active' : ''}`} onClick={() => onConversationSelect(item.id)}>
               <div className="conversation-avatar">{item.name.slice(0, 1).toUpperCase()}</div>
@@ -610,7 +653,7 @@ function ChatPage({
         </div>
         <LiquidGlass className="local-profile">
           <AvatarPreview avatarUrl={avatarUrl} label={nickname} />
-          <div><b>{nickname}</b><span>Local user</span></div>
+          <div><b>{nickname}</b><span>{t('本地用户', 'Local user')}</span></div>
           <Settings size={18} />
         </LiquidGlass>
       </aside>
@@ -618,23 +661,23 @@ function ChatPage({
       <section className="chat-main">
         <header className="chat-header">
           <div>
-            <h1>{activeConversation?.name ?? 'Select or create a conversation'}</h1>
+            <h1>{activeConversation?.name ?? t('请选择或创建一个会话', 'Select or create a conversation')}</h1>
             <div className={`online-line ${isCurrentRunning ? '' : 'offline'}`}><span /> {
-              isCurrentRunning ? 'Running' : isCurrentStarting ? 'Starting Python workers...' : 'Not running'
+              isCurrentRunning ? t('运行中', 'Running') : isCurrentStarting ? t('正在启动通信服务...', 'Starting communication service...') : t('未运行', 'Not running')
             }</div>
           </div>
           <div className="chat-header-actions">
             <button className="glass-button">AI: {aiProvider}</button>
             {isCurrentRunning || isCurrentStarting
-              ? <button className="glass-button" onClick={onStop}><Power size={16} /> Stop</button>
-              : <button className="primary-action inline" disabled={!activeConversation} onClick={onStart}><Power size={16} /> Start</button>}
+              ? <button className="glass-button" onClick={onStop}><Power size={16} /> {t('停止', 'Stop')}</button>
+              : <button className="primary-action inline" disabled={!activeConversation} onClick={onStart}><Power size={16} /> {t('启动', 'Start')}</button>}
             <button className="icon-button"><MoreHorizontal size={20} /></button>
           </div>
         </header>
         {error && <div className="chat-error"><Info size={16} /> {error}</div>}
         <div ref={scrollRef} className="message-list">
           {messages.map((item) => <MessageBubble key={item.id} message={item} accountName={accountName} nickname={nickname} avatarUrl={avatarUrl} />)}
-          {!activeConversation && <div className="system-message">Create a conversation by selecting a Cookie file and a dialogue file.</div>}
+          {!activeConversation && <div className="system-message">{t('请选择 Cookie 文件与对话文件来创建会话。', 'Create a conversation by selecting a Cookie file and a dialogue file.')}</div>}
         </div>
         <footer className="composer-wrap">
           <LiquidGlass className="composer" strong>
@@ -644,7 +687,7 @@ function ChatPage({
                 event.preventDefault();
                 send();
               }
-            }} placeholder={isCurrentRunning ? 'Type a message...' : 'Start this conversation before sending'} rows={1} />
+            }} placeholder={isCurrentRunning ? t('输入消息...', 'Type a message...') : t('请先启动当前会话', 'Start this conversation before sending')} rows={1} />
             <button className="send-button" disabled={!isCurrentRunning} onClick={send}><Send size={18} /></button>
           </LiquidGlass>
         </footer>
@@ -654,6 +697,13 @@ function ChatPage({
 }
 
 function VpnPage({connected, onToggle, mode, onModeChange}: {connected: boolean; onToggle: () => void; mode: ProxyMode; onModeChange: (mode: ProxyMode) => void}) {
+  const {t} = useCopy();
+  const modeLabel = (item: ProxyMode) => ({
+    Global: t('全局', 'Global'),
+    'Rule-based': t('规则模式', 'Rule-based'),
+    Direct: t('直连', 'Direct'),
+    'Research Tunnel': t('研究通道', 'Research Tunnel'),
+  })[item];
   const [tick, setTick] = useState(0);
   useEffect(() => {
     const timer = window.setInterval(() => setTick((value) => value + 1), 1000);
@@ -671,28 +721,28 @@ function VpnPage({connected, onToggle, mode, onModeChange}: {connected: boolean;
             <span className="pulse-ring delay" />
             <Power size={66} />
           </button>
-          <h1>{connected ? 'Protected' : 'Disconnected'}</h1>
-          <p><span className={connected ? 'green-dot' : 'red-dot'} /> {connected ? 'Connected to Zurich, CH-01' : 'Tunnel is offline'}</p>
+          <h1>{connected ? t('已保护', 'Protected') : t('未连接', 'Disconnected')}</h1>
+          <p><span className={connected ? 'green-dot' : 'red-dot'} /> {connected ? t('已连接至 Zurich, CH-01', 'Connected to Zurich, CH-01') : t('网络通道已离线', 'Tunnel is offline')}</p>
         </div>
         <div className="metric-grid">
-          <Metric icon={<ArrowUp />} label="Upload" value={`${upload} MB/s`} />
-          <Metric icon={<ArrowDown />} label="Download" value={`${download} MB/s`} />
-          <Metric icon={<Activity />} label="Total Traffic" value={connected ? `${(4.2 + tick * 0.01).toFixed(2)} GB` : '0 GB'} />
-          <Metric icon={<Gauge />} label="Duration" value={connected ? `04:${String(12 + Math.floor(tick / 60)).padStart(2, '0')}:${String(tick % 60).padStart(2, '0')}` : '00:00:00'} mono />
+          <Metric icon={<ArrowUp />} label={t('上传', 'Upload')} value={`${upload} MB/s`} />
+          <Metric icon={<ArrowDown />} label={t('下载', 'Download')} value={`${download} MB/s`} />
+          <Metric icon={<Activity />} label={t('总流量', 'Total Traffic')} value={connected ? `${(4.2 + tick * 0.01).toFixed(2)} GB` : '0 GB'} />
+          <Metric icon={<Gauge />} label={t('持续时间', 'Duration')} value={connected ? `04:${String(12 + Math.floor(tick / 60)).padStart(2, '0')}:${String(tick % 60).padStart(2, '0')}` : '00:00:00'} mono />
         </div>
       </section>
       <div className="vpn-grid">
         <LiquidGlass className="route-panel">
-          <h2><Route size={21} /> Routing Mode</h2>
+          <h2><Route size={21} /> {t('路由模式', 'Routing Mode')}</h2>
           {(['Global', 'Rule-based', 'Direct', 'Research Tunnel'] as ProxyMode[]).map((item) => (
             <button key={item} className={mode === item ? 'selected' : ''} onClick={() => onModeChange(item)}>
-              <span>{item}</span>
+              <span>{modeLabel(item)}</span>
               {mode === item && <CheckCircle2 size={18} />}
             </button>
           ))}
         </LiquidGlass>
         <LiquidGlass className="node-panel">
-          <div className="panel-head"><h2>Node Selection</h2><div className="search-box"><Search size={16} /><input placeholder="Filter nodes..." /></div></div>
+          <div className="panel-head"><h2>{t('节点选择', 'Node Selection')}</h2><div className="search-box"><Search size={16} /><input placeholder={t('筛选节点...', 'Filter nodes...')} /></div></div>
           <div className="nodes">
             <Node active flag="CH" name="Zurich, CH-01" latency="12ms" meta="Research Net / Secure" />
             <Node flag="US" name="New York, US-04" latency="84ms" meta="Global / High Speed" />
@@ -724,13 +774,20 @@ function SettingsPage({
   themeChoice: ThemeChoice;
   onThemeChoiceChange: (theme: ThemeChoice) => void;
 }) {
+  const {t} = useCopy();
+  const themeLabel = (theme: ThemeChoice) => ({
+    'Dark Glass': t('暗色玻璃', 'Dark Glass'),
+    Light: t('亮色', 'Light'),
+    'High Contrast': t('高对比度', 'High Contrast'),
+    'Blue Research': t('研究蓝', 'Blue Research'),
+  })[theme];
   const avatarInput = useRef<HTMLInputElement | null>(null);
   return (
     <PageFrame>
       <header className="page-header compact">
-        <div className="eyebrow cyan">Workspace Preferences</div>
-        <h1>Settings</h1>
-        <p>Manage your local profile, interface style, communication AI, and file defaults.</p>
+        <div className="eyebrow cyan">{t('工作空间偏好', 'Workspace Preferences')}</div>
+        <h1>{t('设置', 'Settings')}</h1>
+        <p>{t('管理本地身份、界面外观、通信 AI 与文件默认位置。', 'Manage your local profile, interface style, communication AI, and file defaults.')}</p>
       </header>
       <div className="settings-grid">
         <LiquidGlass className="profile-card" strong>
@@ -743,47 +800,47 @@ function SettingsPage({
             if (file) onAvatarChange(URL.createObjectURL(file));
           }} />
           <h2>{nickname}</h2>
-          <p>Local research identity</p>
-          <label><span className="field-label">Nickname</span><input value={nickname} onChange={(event) => onNicknameChange(event.target.value)} /></label>
-          <label><span className="field-label">Local User ID</span><div className="copy-field"><input readOnly value="SM-LOCAL-8492-X" /><button><Copy size={16} /></button></div></label>
+          <p>{t('本地研究身份', 'Local research identity')}</p>
+          <label><span className="field-label">{t('昵称', 'Nickname')}</span><input value={nickname} onChange={(event) => onNicknameChange(event.target.value)} /></label>
+          <label><span className="field-label">{t('本地用户 ID', 'Local User ID')}</span><div className="copy-field"><input readOnly value="SM-LOCAL-8492-X" /><button><Copy size={16} /></button></div></label>
         </LiquidGlass>
         <div className="settings-panels">
           <LiquidGlass className="settings-section">
-            <h2><Bot size={21} /> Communication AI</h2>
+            <h2><Bot size={21} /> {t('通信 AI', 'Communication AI')}</h2>
             <div className="choice-grid three">
               {(['Doubao', 'Other AI', 'Custom Provider'] as AiProvider[]).map((provider) => (
                 <button key={provider} className={aiProvider === provider ? 'selected' : ''} onClick={() => onAiProviderChange(provider)}>
-                  <b>{provider}</b><span>{provider === 'Doubao' ? 'Current channel' : 'Placeholder'}</span>
+                  <b>{provider}</b><span>{provider === 'Doubao' ? t('当前通道', 'Current channel') : t('待接入', 'Placeholder')}</span>
                 </button>
               ))}
             </div>
           </LiquidGlass>
           <LiquidGlass className="settings-section">
-            <h2><Palette size={21} /> Appearance</h2>
+            <h2><Palette size={21} /> {t('外观', 'Appearance')}</h2>
             <div className="theme-grid">
               {(['Dark Glass', 'Light', 'High Contrast', 'Blue Research'] as ThemeChoice[]).map((theme) => (
                 <button key={theme} className={themeChoice === theme ? 'selected' : ''} onClick={() => onThemeChoiceChange(theme)}>
                   <span className={`theme-swatch swatch-${theme.toLowerCase().replaceAll(' ', '-')}`} />
-                  <b>{theme}</b>
+                  <b>{themeLabel(theme)}</b>
                 </button>
               ))}
             </div>
           </LiquidGlass>
           <div className="split-panels">
             <LiquidGlass className="settings-section">
-              <h2><MessageSquare size={21} /> Message Behavior</h2>
-              <ToggleRow title="Polling interval" detail="1 second demo interval" control={<select><option>1 second</option><option>3 seconds</option></select>} />
-              <ToggleRow title="Show echoed messages" detail="Keep self-confirmed messages visible." enabled />
-              <ToggleRow title="Save local history" detail="Persist messages on this device." enabled />
+              <h2><MessageSquare size={21} /> {t('消息行为', 'Message Behavior')}</h2>
+              <ToggleRow title={t('轮询间隔', 'Polling interval')} detail={t('当前为 1 秒间隔', 'Current 1 second interval')} control={<select><option>{t('1 秒', '1 second')}</option><option>{t('3 秒', '3 seconds')}</option></select>} />
+              <ToggleRow title={t('显示回传消息', 'Show echoed messages')} detail={t('保留已确认的本人消息。', 'Keep self-confirmed messages visible.')} enabled />
+              <ToggleRow title={t('保存本地历史', 'Save local history')} detail={t('在此设备上保留消息记录。', 'Persist messages on this device.')} enabled />
             </LiquidGlass>
             <LiquidGlass className="settings-section">
-              <h2><FolderOpen size={21} /> File Storage</h2>
-              <label><span className="field-label">Cookies folder</span><input value="Core_Architecture/cookies" readOnly /></label>
-              <label><span className="field-label">Conversation folder</span><input value="Core_Architecture/test" readOnly /></label>
-              <label><span className="field-label">Log folder</span><input value="logs/llmtrans" readOnly /></label>
+              <h2><FolderOpen size={21} /> {t('文件存储', 'File Storage')}</h2>
+              <label><span className="field-label">{t('Cookie 文件夹', 'Cookies folder')}</span><input value="Core_Architecture/cookies" readOnly /></label>
+              <label><span className="field-label">{t('对话文件夹', 'Conversation folder')}</span><input value="Core_Architecture/test" readOnly /></label>
+              <label><span className="field-label">{t('日志文件夹', 'Log folder')}</span><input value="logs/llmtrans" readOnly /></label>
             </LiquidGlass>
           </div>
-          <div className="settings-actions"><button className="secondary-action">Cancel</button><button className="primary-action inline"><Save size={17} /> Save Preferences</button></div>
+          <div className="settings-actions"><button className="secondary-action">{t('取消', 'Cancel')}</button><button className="primary-action inline"><Save size={17} /> {t('保存偏好', 'Save Preferences')}</button></div>
         </div>
       </div>
     </PageFrame>
@@ -791,34 +848,36 @@ function SettingsPage({
 }
 
 function AboutPage() {
+  const {t} = useCopy();
   return (
     <PageFrame>
       <header className="page-header compact">
-        <div className="eyebrow cyan">About llmtrans</div>
-        <h1>Built for academic research and prototype validation.</h1>
+        <div className="eyebrow cyan">{t('关于 llmtrans', 'About llmtrans')}</div>
+        <h1>{t('认识 llmtrans 背后的研究团队。', 'Meet the research team behind llmtrans.')}</h1>
+        <p>{t('项目由南开大学教师与学生成员共同推进，团队关注基于 AI 应用与多模态构建的加密通信通道，以及产品在真实交流场景中的可理解性与使用体验。', 'Jointly developed by Nankai University teachers and students, the team studies encrypted communication channels based on AI applications and multimodal modeling, with close attention to real-world usability.')}</p>
       </header>
       <div className="about-grid">
         <LiquidGlass className="research-card">
-          <h2><Sparkles size={22} /> Research Intent</h2>
-          <p>llmtrans is a controlled desktop environment for studying AI-mediated communication channels, local identity protocols, and experimental message routing workflows.</p>
-          <p>The current UI prototype is intentionally separated from the crawler communication core so design, usability, and interaction flow can be validated first.</p>
+          <h2><Sparkles size={22} /> {t('研究方向', 'Research Direction')}</h2>
+          <p>{t('llmtrans 希望为不同参与者提供清晰、自然且可持续使用的交流空间，让跨端身份、共享会话与 AI 中介通信以更容易理解的方式呈现在用户面前。', 'llmtrans explores a clear and approachable communication space where cross-device identity, shared conversations, and AI-mediated communication can be understood and used naturally.')}</p>
+          <p>{t('团队不仅关注产品能否运行，也关注人们能否理解它、信任它，并愿意在长期交流中持续使用。我们通过原型设计、交流实验与体验观察，逐步明确产品的边界与价值。', 'We study not only whether a product works, but whether people can understand it, trust it, and feel comfortable using it over time. Prototypes, communication experiments, and experience observation guide the product direction.')}</p>
         </LiquidGlass>
         <LiquidGlass className="affiliation-card">
-          <h2>Affiliation</h2>
-          <div className="affiliation-line"><Shield /><div><b>Nankai University</b><span>Research prototype workspace</span></div></div>
-          <MiniStat label="Team" value="3 people" />
-          <MiniStat label="Use" value="Academic" />
+          <h2>{t('团队归属', 'Affiliation')}</h2>
+          <div className="affiliation-line"><Shield /><div><b>{t('南开大学', 'Nankai University')}</b><span>{t('密码与网络空间安全学院', 'College of Cyber Science')}</span></div></div>
+          <MiniStat label={t('成员', 'Team')} value={t('3 人', '3 people')} />
+          <MiniStat label={t('用途', 'Use')} value={t('学术研究', 'Academic')} />
         </LiquidGlass>
       </div>
       <section className="team-section">
-        <h2><Users size={22} /> Research Team</h2>
+        <h2><Users size={22} /> {t('核心团队', 'Core Team')}</h2>
         <div className="team-grid">
-          <TeamCard initials="T" role="Teacher / Supervisor" name="Project Supervisor" contribution="Guides research direction, validates academic scope, and reviews project architecture." />
-          <TeamCard initials="S1" role="Student 1" name="Student Developer" contribution="Implements desktop UI, message protocol, and bridge integration workflow." />
-          <TeamCard initials="S2" role="Student 2" name="Student Developer" contribution="Works on crawler channel verification, packaging, documentation, and demo readiness." />
+          <TeamCard image="/team/teacher.jpg" role={t('指导教师 / 项目负责人', 'Teacher / Project Supervisor')} name={t('李想', 'Li Xiang')} contribution={t('南开大学密码与网络空间安全学院副教授，负责研究方向、学术边界与整体架构评审，推动实验目标与产品表达保持一致。', 'Associate Professor at Nankai University. Guides the research direction, academic scope, and overall project review while keeping experimental goals aligned with the product vision.')} />
+          <TeamCard image="/team/student1.jpg" role={t('学生开发者 / 桌面端', 'Student Developer / Desktop')} name={t('吴宇轩（Siamese）', 'Yuxuan Wu (Siamese)')} contribution={t('南开大学信息安全专业本科生，负责桌面交互界面、本地身份体验与消息工作流，让研究概念能够转化为清晰可用的产品界面。', 'Information Security undergraduate at Nankai University, responsible for the desktop experience, local identity interaction, and message workflow that turn research concepts into an approachable product.')} />
+          <TeamCard image="/team/student2.jpg" role={t('学生开发者 / 通信核心', 'Student Developer / Communication')} name={t('石昊洋（商鞅）', 'Haoyang Shi (Shang Yang)')} contribution={t('南开大学信息安全专业本科生，负责通信体验验证、产品交付、文档整理与演示呈现，让研究成果更容易被理解、体验与传播。', 'Information Security undergraduate at Nankai University, focused on communication experience validation, product delivery, documentation, and presentation of the research outcomes.')} />
         </div>
       </section>
-      <footer className="about-footer">llmtrans Core UI Prototype · 版权所有南开大学llmtrans团队 · Academic research only</footer>
+      <footer className="about-footer">{t('© 2026 南开大学 · LLMTRANS 团队 · 学术研究', '© 2026 Nankai University · LLMTRANS Team · Academic Research')}</footer>
     </PageFrame>
   );
 }
@@ -880,6 +939,6 @@ function ToggleRow({title, detail, enabled, control}: {title: string; detail: st
   return <div className="toggle-row"><div><b>{title}</b><span>{detail}</span></div>{control ?? <button className={`toggle ${enabled ? 'enabled' : ''}`}><span /></button>}</div>;
 }
 
-function TeamCard({initials, role, name, contribution}: {initials: string; role: string; name: string; contribution: string}) {
-  return <LiquidGlass className="team-card"><div className="team-avatar">{initials}</div><h3>{name}</h3><b>{role}</b><p>{contribution}</p></LiquidGlass>;
+function TeamCard({image, role, name, contribution}: {image: string; role: string; name: string; contribution: string}) {
+  return <LiquidGlass className="team-card"><img className="team-avatar" src={image} alt={name} /><div className="team-card-copy"><h3>{name}</h3><b>{role}</b><p>{contribution}</p></div></LiquidGlass>;
 }

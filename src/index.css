@@ -35,6 +35,31 @@ body {
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 
+.auth-language-toggle,
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid rgba(255,255,255,.46);
+  border-radius: 999px;
+  background: rgba(244,244,244,.16);
+  color: var(--text);
+  font-weight: 800;
+  backdrop-filter: blur(24px) saturate(170%);
+  transition: transform .2s ease, background .2s ease;
+}
+.auth-language-toggle:hover,
+.language-toggle:hover { transform: scale(1.04); background: rgba(244,244,244,.30); }
+.auth-language-toggle {
+  position: fixed;
+  z-index: 12;
+  top: 24px;
+  right: 28px;
+  padding: 10px 14px;
+}
+.language-toggle { padding: 9px 13px; }
+
 .app-shell {
   min-height: 100vh;
   background:
@@ -409,13 +434,17 @@ input:focus, textarea:focus, select:focus { border-color: rgba(255,159,69,.72); 
 }
 
 .theme-light .nav-links button,
-.theme-light .icon-button {
+.theme-light .icon-button,
+.theme-light .language-toggle,
+.theme-light .auth-language-toggle {
   color: rgba(9,17,31,.72);
 }
 
 .theme-light .nav-links button:hover,
 .theme-light .nav-links button.active,
-.theme-light .icon-button:hover {
+.theme-light .icon-button:hover,
+.theme-light .language-toggle:hover,
+.theme-light .auth-language-toggle:hover {
   color: #09111f;
   background: rgba(255,255,255,.66);
 }
@@ -694,11 +723,12 @@ input:focus, textarea:focus, select:focus { border-color: rgba(255,159,69,.72); 
 .team-section { margin-top: 28px; }
 .team-section > h2 { display: flex; align-items: center; gap: 10px; }
 .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.team-card { text-align: center; }
-.team-avatar { width: 82px; height: 82px; border-radius: 999px; margin: 0 auto 14px; display: grid; place-items: center; background: linear-gradient(135deg, #fff2d8, var(--orange)); color: #1d1d1f; font-weight: 900; }
-.team-card h3 { margin: 0; }
+.team-card .liquid-glass-content { display: grid; grid-template-columns: 112px 1fr; align-items: center; gap: 20px; text-align: left; }
+.team-avatar { width: 112px; height: 132px; border-radius: 22px; display: block; object-fit: cover; object-position: center; box-shadow: 0 14px 32px rgba(0,0,0,.22); }
+.team-card-copy { min-width: 0; }
+.team-card h3 { margin: 0 0 7px; font-size: 20px; }
 .team-card b { color: var(--cyan); font-size: 12px; text-transform: uppercase; letter-spacing: .15em; }
-.team-card p { color: var(--muted); line-height: 1.6; }
+.team-card p { margin-bottom: 0; color: var(--muted); line-height: 1.65; }
 .about-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--faint); text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: .16em; }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }

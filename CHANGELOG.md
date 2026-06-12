@@ -2,6 +2,9 @@
 
 ## 2026-06-12
 
+- Added a persistent Chinese/English switch to the login page and authenticated desktop navigation, with localized copy across the main workspace.
+- Replaced the placeholder About content with the website's real Nankai University team introduction and full-color portraits for Li Xiang, Yuxuan Wu, and Haoyang Shi.
+- Removed the desktop-demo disclaimer from the bottom of the login/register panel.
 - Fixed the black Vite debug page by installing an in-memory browser preview bridge whenever the Electron preload API is unavailable.
 - Compressed the light theme background to a smaller JPEG asset to reduce browser decoding and transfer overhead.
 - Added a persistent light/dark theme toggle to the desktop application's top navigation.
