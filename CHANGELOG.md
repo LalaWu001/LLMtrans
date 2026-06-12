@@ -2,6 +2,7 @@
 
 ## 2026-06-12
 
+- Fixed packaged Electron team portraits and theme backgrounds by resolving assets relative to the built `dist/index.html` instead of the filesystem root.
 - Added a persistent Chinese/English switch to the login page and authenticated desktop navigation, with localized copy across the main workspace.
 - Replaced the placeholder About content with the website's real Nankai University team introduction and full-color portraits for Li Xiang, Yuxuan Wu, and Haoyang Shi.
 - Removed the desktop-demo disclaimer from the bottom of the login/register panel.

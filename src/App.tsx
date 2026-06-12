@@ -115,6 +115,10 @@ export default function App() {
     receiverRunning: false,
   });
   const [appError, setAppError] = useState('');
+  const backgroundStyle = {
+    '--dark-background-image': `url("${new URL('./backgrounds/main-bg.jpg', document.baseURI).href}")`,
+    '--light-background-image': `url("${new URL('./backgrounds/light-bg.jpg', document.baseURI).href}")`,
+  } as React.CSSProperties;
 
   const activeConversation = conversations.find((item) => item.id === activeConversationId) ?? conversations[0];
 
@@ -197,7 +201,7 @@ export default function App() {
       language,
       toggleLanguage: () => setLanguage((current) => current === 'zh' ? 'en' : 'zh'),
     }}>
-    <div className={`app-shell theme-${themeChoice.toLowerCase().replaceAll(' ', '-')}`}>
+    <div className={`app-shell theme-${themeChoice.toLowerCase().replaceAll(' ', '-')}`} style={backgroundStyle}>
       <GlassFilter />
       <div className="ambient-grid" />
       {!authenticated ? (
@@ -872,9 +876,9 @@ function AboutPage() {
       <section className="team-section">
         <h2><Users size={22} /> {t('核心团队', 'Core Team')}</h2>
         <div className="team-grid">
-          <TeamCard image="/team/teacher.jpg" role={t('指导教师 / 项目负责人', 'Teacher / Project Supervisor')} name={t('李想', 'Li Xiang')} contribution={t('南开大学密码与网络空间安全学院副教授，负责研究方向、学术边界与整体架构评审，推动实验目标与产品表达保持一致。', 'Associate Professor at Nankai University. Guides the research direction, academic scope, and overall project review while keeping experimental goals aligned with the product vision.')} />
-          <TeamCard image="/team/student1.jpg" role={t('学生开发者 / 桌面端', 'Student Developer / Desktop')} name={t('吴宇轩（Siamese）', 'Yuxuan Wu (Siamese)')} contribution={t('南开大学信息安全专业本科生，负责桌面交互界面、本地身份体验与消息工作流，让研究概念能够转化为清晰可用的产品界面。', 'Information Security undergraduate at Nankai University, responsible for the desktop experience, local identity interaction, and message workflow that turn research concepts into an approachable product.')} />
-          <TeamCard image="/team/student2.jpg" role={t('学生开发者 / 通信核心', 'Student Developer / Communication')} name={t('石昊洋（商鞅）', 'Haoyang Shi (Shang Yang)')} contribution={t('南开大学信息安全专业本科生，负责通信体验验证、产品交付、文档整理与演示呈现，让研究成果更容易被理解、体验与传播。', 'Information Security undergraduate at Nankai University, focused on communication experience validation, product delivery, documentation, and presentation of the research outcomes.')} />
+          <TeamCard image="./team/teacher.jpg" role={t('指导教师 / 项目负责人', 'Teacher / Project Supervisor')} name={t('李想', 'Li Xiang')} contribution={t('南开大学密码与网络空间安全学院副教授，负责研究方向、学术边界与整体架构评审，推动实验目标与产品表达保持一致。', 'Associate Professor at Nankai University. Guides the research direction, academic scope, and overall project review while keeping experimental goals aligned with the product vision.')} />
+          <TeamCard image="./team/student1.jpg" role={t('学生开发者 / 桌面端', 'Student Developer / Desktop')} name={t('吴宇轩（Siamese）', 'Yuxuan Wu (Siamese)')} contribution={t('南开大学信息安全专业本科生，负责桌面交互界面、本地身份体验与消息工作流，让研究概念能够转化为清晰可用的产品界面。', 'Information Security undergraduate at Nankai University, responsible for the desktop experience, local identity interaction, and message workflow that turn research concepts into an approachable product.')} />
+          <TeamCard image="./team/student2.jpg" role={t('学生开发者 / 通信核心', 'Student Developer / Communication')} name={t('石昊洋（商鞅）', 'Haoyang Shi (Shang Yang)')} contribution={t('南开大学信息安全专业本科生，负责通信体验验证、产品交付、文档整理与演示呈现，让研究成果更容易被理解、体验与传播。', 'Information Security undergraduate at Nankai University, focused on communication experience validation, product delivery, documentation, and presentation of the research outcomes.')} />
         </div>
       </section>
       <footer className="about-footer">{t('© 2026 南开大学 · LLMTRANS 团队 · 学术研究', '© 2026 Nankai University · LLMTRANS Team · Academic Research')}</footer>
