@@ -69,7 +69,7 @@ button { cursor: pointer; }
 .app-shell.theme-light {
   background:
     linear-gradient(rgba(255, 255, 255, 0.24), rgba(247, 251, 255, 0.42)),
-    url("/backgrounds/light.png"),
+    url("/backgrounds/light-bg.jpg"),
     linear-gradient(135deg, var(--bg-a), var(--bg-b) 48%, var(--bg-c));
   background-size: cover, cover, auto;
   background-position: center, center, center;
@@ -79,7 +79,7 @@ button { cursor: pointer; }
   background:
     linear-gradient(135deg, rgba(255,255,255,.30), rgba(239,246,255,.42)),
     var(--login-image, none),
-    url("/backgrounds/light.png");
+    url("/backgrounds/light-bg.jpg");
   background-size: cover;
   background-position: center;
 }

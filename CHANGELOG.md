@@ -2,8 +2,10 @@
 
 ## 2026-06-12
 
+- Fixed the black Vite debug page by installing an in-memory browser preview bridge whenever the Electron preload API is unavailable.
+- Compressed the light theme background to a smaller JPEG asset to reduce browser decoding and transfer overhead.
 - Added a persistent light/dark theme toggle to the desktop application's top navigation.
-- Connected the Light theme to `public/backgrounds/light.png` and added light-mode glass, navigation, form, chat, and login styling.
+- Connected the Light theme to `public/backgrounds/light-bg.jpg` and added light-mode glass, navigation, form, chat, and login styling.
 - Kept the existing Settings appearance choices synchronized with the top-navigation shortcut.
 
 ## 2026-06-10

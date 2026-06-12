@@ -15,7 +15,7 @@
 - `build/icon.png`: Source application icon retained outside Vite's generated `dist/` directory.
 - `build/icon.ico`: Multi-size Windows icon used by the Electron window and packaged executable.
 - `public/backgrounds/main-bg.jpg`: Local background image used by the authenticated app pages (`Project`, `Chat`, `VPN`, `Settings`, `About`).
-- `public/backgrounds/light.png`: Light-mode background used by the React/Electron desktop application.
+- `public/backgrounds/light-bg.jpg`: Compressed light-mode background used by the React/Electron desktop application.
 - `server/`: Deprecated experimental HTTP bridge. It is not used by the Electron application and will not be extended.
 - `scripts/install-dependencies.cmd`: Double-click launcher distributed as `安装运行环境.cmd`.
 - `scripts/install-dependencies.ps1`: Installs or verifies Python 3.12, Playwright, chardet, and Playwright Chromium for the current Windows user.
@@ -42,6 +42,7 @@
 - The React chat UI now loads accounts, conversations, and messages from the Electron backend rather than demo arrays.
 - The React UI uses a shared liquid-glass visual system in `src/index.css`, now aligned with the user's SiameseBlog glass style. Authenticated pages use `public/backgrounds/main-bg.jpg`; the login page remains the only page with a user-selectable image background.
 - The desktop top navigation can switch between Light and Dark Glass modes. The selection is stored in browser/Electron local storage and remains synchronized with the Settings appearance selector.
+- `src/browser-bridge.ts` supplies an in-memory preview API when the React UI is opened through `npm run dev`; Electron continues to use the real preload API.
 - Windows packaging target is a portable single executable named `llmtrans.exe` generated under `release/`.
 - Windows packaging and the Electron window use `build/icon.ico` as the llmtrans application icon.
 - Vite uses `base: './'` so JavaScript, CSS, and local background assets resolve correctly when Electron loads the app through `file://`.
