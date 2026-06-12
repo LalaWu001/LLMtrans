@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-12
+
+- Added a persistent light/dark theme toggle to the desktop application's top navigation.
+- Connected the Light theme to `public/backgrounds/light.png` and added light-mode glass, navigation, form, chat, and login styling.
+- Kept the existing Settings appearance choices synchronized with the top-navigation shortcut.
+
 ## 2026-06-10
 
 - Improved mobile background video playback with inline autoplay attributes, hidden WebKit controls, non-interactive video layers, and playback retries after page visibility or first touch.

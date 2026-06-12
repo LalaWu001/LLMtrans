@@ -28,7 +28,9 @@ import {
   Send,
   Settings,
   Shield,
+  Sun,
   Sparkles,
+  Moon,
   UserCircle,
   Users,
 } from 'lucide-react';
@@ -38,6 +40,15 @@ type AuthMode = 'login' | 'register';
 type ThemeChoice = 'Dark Glass' | 'Light' | 'High Contrast' | 'Blue Research';
 type ProxyMode = 'Global' | 'Rule-based' | 'Direct' | 'Research Tunnel';
 type AiProvider = 'Doubao' | 'Other AI' | 'Custom Provider';
+const THEME_STORAGE_KEY = 'llmtrans-theme';
+
+function loadThemeChoice(): ThemeChoice {
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+  return stored === 'Dark Glass' || stored === 'Light' || stored === 'High Contrast' || stored === 'Blue Research'
+    ? stored
+    : 'Dark Glass';
+}
+
 type Conversation = {
   id: string;
   name: string;
@@ -66,7 +77,7 @@ export default function App() {
   const [nickname, setNickname] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [backgroundUrl, setBackgroundUrl] = useState('');
-  const [themeChoice, setThemeChoice] = useState<ThemeChoice>('Dark Glass');
+  const [themeChoice, setThemeChoice] = useState<ThemeChoice>(loadThemeChoice);
   const [aiProvider, setAiProvider] = useState<AiProvider>('Doubao');
   const [proxyMode, setProxyMode] = useState<ProxyMode>('Rule-based');
   const [vpnConnected, setVpnConnected] = useState(true);
@@ -148,6 +159,10 @@ export default function App() {
     if (authenticated && activeConversationId) loadMessages(activeConversationId).catch((error) => setAppError(error.message));
   }, [authenticated, activeConversationId]);
 
+  useEffect(() => {
+    window.localStorage.setItem(THEME_STORAGE_KEY, themeChoice);
+  }, [themeChoice]);
+
   return (
     <div className={`app-shell theme-${themeChoice.toLowerCase().replaceAll(' ', '-')}`}>
       <GlassFilter />
@@ -170,7 +185,14 @@ export default function App() {
         />
       ) : (
         <>
-          <TopNav page={page} onPageChange={setPage} nickname={nickname} onLogout={logout} />
+          <TopNav
+            page={page}
+            onPageChange={setPage}
+            nickname={nickname}
+            onLogout={logout}
+            themeChoice={themeChoice}
+            onThemeToggle={() => setThemeChoice((current) => current === 'Light' ? 'Dark Glass' : 'Light')}
+          />
           {page === 'project' && <ProjectPage onOpenChat={() => setPage('chat')} />}
           {page === 'chat' && (
             <ChatPage
@@ -412,11 +434,15 @@ function TopNav({
   onPageChange,
   nickname,
   onLogout,
+  themeChoice,
+  onThemeToggle,
 }: {
   page: Page;
   onPageChange: (page: Page) => void;
   nickname: string;
   onLogout: () => Promise<void>;
+  themeChoice: ThemeChoice;
+  onThemeToggle: () => void;
 }) {
   const nav: Array<{id: Page; label: string}> = [
     {id: 'project', label: 'Project'},
@@ -439,6 +465,14 @@ function TopNav({
         </div>
       </div>
       <div className="nav-actions">
+        <button
+          className="icon-button theme-toggle"
+          title={themeChoice === 'Light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          aria-label={themeChoice === 'Light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          onClick={onThemeToggle}
+        >
+          {themeChoice === 'Light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
         <button className="icon-button"><UserCircle size={20} /></button>
         <button className="icon-button"><CircleHelp size={20} /></button>
         <button className="icon-button" title="Log out" aria-label="Log out" onClick={onLogout}><LogOut size={20} /></button>
