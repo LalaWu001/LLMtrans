@@ -66,6 +66,7 @@ declare global {
         chooseSend(): Promise<string | null>;
         list(conversationId: string): Promise<ElectronFileTransfer[]>;
         send(conversationId: string, filePath: string): Promise<ElectronFileTransfer>;
+        open(filePath: string): Promise<boolean>;
         openLocation(filePath: string): Promise<boolean>;
       };
       conversations: {

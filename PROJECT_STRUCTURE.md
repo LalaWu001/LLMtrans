@@ -41,6 +41,8 @@
 - Starting a conversation creates four processes: text sender, text receiver, persistent file-sender adapter, and file receiver.
 - The file adapter replaces only the scripts' Tk file-dialog responses. The original sender still performs one upload per invocation, while the original receiver retains its sequential `text1.txt`, `text2.txt`, and later polling behavior.
 - Received files are saved under `<Downloads>/llmtrans/<conversation-id>/`; received file cards can reveal the saved file in Explorer.
+- Chat messages and file transfers share one timestamp-sorted timeline. File cards are centered because the cloud-drive receiver cannot reliably identify the remote sender.
+- Completed file cards provide separate actions to open the local file with its default application or reveal it in Explorer.
 - Starting a conversation launches `Core_Architecture/cmd/1.py` and `Core_Architecture/cmd_reserve/1.py`. The saved Cookie path and dialogue path are written once to each process through stdin.
 - The built-in conversation is created automatically with `Core_Architecture/cookies/cookies.json` and `Core_Architecture/test/test5.txt`.
 - Subsequent sends reuse the existing sender process and write only the original script menu command plus the encoded message payload.
@@ -72,7 +74,7 @@
 - The top-navigation logout action stops all four active Python workers before clearing the current local account session.
 - Every newly opened application instance requires its own login; account records and conversation history remain shared in SQLite.
 - File selection: `files:choose-cookie`, `files:choose-dialogue`.
-- File transfer: `files:choose-send`, `files:list`, `files:send`, `files:open-location`.
+- File transfer: `files:choose-send`, `files:list`, `files:send`, `files:open`, `files:open-location`.
 - Conversations: `conversations:list`, `conversations:create`, `conversations:start`, `conversations:stop`, `conversations:status`.
 - Messages: `messages:list`, `messages:send`.
 - Renderer events: `worker:status`, `worker:error`, `messages:new`, `files:changed`.

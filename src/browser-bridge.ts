@@ -103,6 +103,9 @@ export function installBrowserBridge() {
       async openLocation() {
         return true;
       },
+      async open() {
+        return true;
+      },
     },
     conversations: {
       async list() {
@@ -173,7 +176,6 @@ export function installBrowserBridge() {
           conversation.lastMessage = content;
           conversation.time = message.time;
         }
-        messageListeners.forEach((listener) => listener({...message}));
         return {...message};
       },
     },

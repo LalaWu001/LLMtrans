@@ -89,6 +89,7 @@ type ChatMessage = {
   sender: string;
   text: string;
   time: string;
+  sentAt: string;
   status?: string;
 };
 
@@ -329,7 +330,22 @@ export default function App() {
                   setAppError(error instanceof Error ? error.message : String(error));
                 }
               }}
-              onOpenFile={(filePath) => window.llmtrans.files.openLocation(filePath)}
+              onOpenFile={async (filePath) => {
+                try {
+                  await window.llmtrans.files.open(filePath);
+                  setAppError('');
+                } catch (error) {
+                  setAppError(error instanceof Error ? error.message : String(error));
+                }
+              }}
+              onRevealFile={async (filePath) => {
+                try {
+                  await window.llmtrans.files.openLocation(filePath);
+                  setAppError('');
+                } catch (error) {
+                  setAppError(error instanceof Error ? error.message : String(error));
+                }
+              }}
             />
           )}
           {page === 'vpn' && <VpnPage connected={vpnConnected} onToggle={() => setVpnConnected((value) => !value)} mode={proxyMode} onModeChange={setProxyMode} />}
@@ -633,6 +649,7 @@ function ChatPage({
   onSend,
   onSendFile,
   onOpenFile,
+  onRevealFile,
 }: {
   conversations: Conversation[];
   activeConversation?: Conversation;
@@ -650,7 +667,8 @@ function ChatPage({
   onStop: () => Promise<void>;
   onSend: (text: string) => Promise<void>;
   onSendFile: () => Promise<void>;
-  onOpenFile: (filePath: string) => Promise<boolean>;
+  onOpenFile: (filePath: string) => Promise<void>;
+  onRevealFile: (filePath: string) => Promise<void>;
 }) {
   const {t} = useCopy();
   const [draft, setDraft] = useState('');
@@ -661,6 +679,28 @@ function ChatPage({
   const isCurrentRunning = workerStatus.status === 'running' && workerStatus.conversationId === activeConversation?.id;
   const isCurrentStarting = workerStatus.status === 'starting' && workerStatus.conversationId === activeConversation?.id;
   const areFileWorkersRunning = isCurrentRunning && workerStatus.fileSenderRunning && workerStatus.fileReceiverRunning;
+  const timeline = useMemo(() => {
+    const entries = [
+      ...messages.map((message, index) => ({
+        id: `message-${message.id}`,
+        type: 'message' as const,
+        sentAt: message.sentAt,
+        order: index,
+        message,
+      })),
+      ...fileTransfers.map((transfer, index) => ({
+        id: `file-${transfer.id}`,
+        type: 'file' as const,
+        sentAt: transfer.sentAt,
+        order: messages.length + index,
+        transfer,
+      })),
+    ];
+    return entries.sort((left, right) => {
+      const timeDifference = Date.parse(left.sentAt) - Date.parse(right.sentAt);
+      return timeDifference || left.order - right.order;
+    });
+  }, [messages, fileTransfers]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({top: scrollRef.current.scrollHeight, behavior: 'smooth'});
@@ -733,14 +773,16 @@ function ChatPage({
         </header>
         {error && <div className="chat-error"><Info size={16} /> {error}</div>}
         <div ref={scrollRef} className="message-list">
-          {messages.map((item) => <MessageBubble key={item.id} message={item} accountName={accountName} nickname={nickname} avatarUrl={avatarUrl} />)}
-          {fileTransfers.map((transfer) => (
-            <FileTransferBubble
-              key={transfer.id}
-              transfer={transfer}
-              onOpen={() => onOpenFile(transfer.filePath)}
-            />
-          ))}
+          {timeline.map((entry) => entry.type === 'message'
+            ? <MessageBubble key={entry.id} message={entry.message} accountName={accountName} nickname={nickname} avatarUrl={avatarUrl} />
+            : (
+              <FileTransferBubble
+                key={entry.id}
+                transfer={entry.transfer}
+                onOpen={() => onOpenFile(entry.transfer.filePath)}
+                onReveal={() => onRevealFile(entry.transfer.filePath)}
+              />
+            ))}
           {!activeConversation && <div className="system-message">{t('请选择 Cookie 文件与对话文件来创建会话。', 'Create a conversation by selecting a Cookie file and a dialogue file.')}</div>}
         </div>
         <footer className="composer-wrap">
@@ -1002,33 +1044,36 @@ function MessageBubble({
 function FileTransferBubble({
   transfer,
   onOpen,
+  onReveal,
 }: {
   transfer: ElectronFileTransfer;
-  onOpen: () => Promise<boolean>;
+  onOpen: () => Promise<void>;
+  onReveal: () => Promise<void>;
 }) {
   const {t} = useCopy();
-  const self = transfer.direction === 'self';
   const status = {
     sending: t('发送中', 'Sending'),
     sent: t('已发送', 'Sent'),
     received: t('已接收', 'Received'),
     error: t('发送失败', 'Failed'),
   }[transfer.status];
+  const isAvailable = transfer.status === 'sent' || transfer.status === 'received';
   return (
-    <div className={`file-transfer-row ${self ? 'self' : ''}`}>
-      <button
-        className={`file-transfer-card ${transfer.status}`}
-        disabled={transfer.status !== 'received'}
-        onClick={onOpen}
-      >
+    <div className="file-transfer-row">
+      <div className={`file-transfer-card ${transfer.status}`}>
         <span className="file-transfer-icon"><FileText size={22} /></span>
         <span className="file-transfer-copy">
           <b>{transfer.fileName}</b>
           <small>{status} · {transfer.time}</small>
           {transfer.errorMessage && <em>{transfer.errorMessage}</em>}
         </span>
-        {transfer.status === 'received' && <FolderOpen size={17} />}
-      </button>
+        {isAvailable && (
+          <span className="file-transfer-actions">
+            <button onClick={onOpen}>{t('打开', 'Open')}</button>
+            <button title={t('在文件夹中显示', 'Show in folder')} aria-label={t('在文件夹中显示', 'Show in folder')} onClick={onReveal}><FolderOpen size={16} /></button>
+          </span>
+        )}
+      </div>
     </div>
   );
 }

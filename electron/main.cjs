@@ -80,6 +80,12 @@ function registerIpc() {
     shell.showItemInFolder(filePath);
     return true;
   });
+  ipcMain.handle('files:open', async (_event, filePath) => {
+    if (!filePath || !fs.existsSync(filePath)) throw new Error('文件不存在');
+    const error = await shell.openPath(filePath);
+    if (error) throw new Error(error);
+    return true;
+  });
 
   ipcMain.handle('conversations:list', () => database.listConversations());
   ipcMain.handle('conversations:create', (_event, payload) => database.createConversation(payload));

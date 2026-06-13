@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('llmtrans', {
     chooseSend: () => ipcRenderer.invoke('files:choose-send'),
     list: (conversationId) => ipcRenderer.invoke('files:list', conversationId),
     send: (conversationId, filePath) => ipcRenderer.invoke('files:send', {conversationId, filePath}),
+    open: (filePath) => ipcRenderer.invoke('files:open', filePath),
     openLocation: (filePath) => ipcRenderer.invoke('files:open-location', filePath),
   },
   conversations: {

@@ -2,6 +2,9 @@
 
 ## 2026-06-13
 
+- Merged text messages and file transfers into one timestamp-sorted chat timeline so later messages appear below earlier file cards.
+- Centered every file card because the receiver cannot reliably determine which remote participant uploaded the cloud-drive file.
+- Added separate Open and Show in Folder actions for completed local file transfers; received files remain automatically downloaded by the receiver script.
 - Changed only the file sender and receiver Playwright launch mode to headless so starting a conversation no longer opens visible Doubao browser windows.
 - Integrated the unchanged `fawenjian.py` and `wenjianjieshou.py` scripts into the Electron conversation lifecycle.
 - Conversation start now launches four workers for text send/receive and file send/receive; conversation stop closes all four.
