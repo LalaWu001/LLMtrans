@@ -2,6 +2,7 @@
 
 ## 2026-06-13
 
+- Changed only the file sender and receiver Playwright launch mode to headless so starting a conversation no longer opens visible Doubao browser windows.
 - Integrated the unchanged `fawenjian.py` and `wenjianjieshou.py` scripts into the Electron conversation lifecycle.
 - Conversation start now launches four workers for text send/receive and file send/receive; conversation stop closes all four.
 - Added a non-invasive Python adapter that supplies frontend-selected paths to the scripts' existing Tk dialogs and converts their output into Electron events.

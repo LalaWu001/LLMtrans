@@ -70,7 +70,7 @@ def main():
     with sync_playwright() as p:
         browser = p.chromium.launch(
             # 定位没有问题后，可以改成 True
-            headless=False,
+            headless=True,
 
             args=[
                 "--no-sandbox",
