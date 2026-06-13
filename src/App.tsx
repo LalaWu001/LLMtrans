@@ -108,11 +108,14 @@ export default function App() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState('');
   const [messages, setMessages] = useState<Record<string, ChatMessage[]>>({});
+  const [fileTransfers, setFileTransfers] = useState<Record<string, ElectronFileTransfer[]>>({});
   const [workerStatus, setWorkerStatus] = useState<WorkerStatus>({
     status: 'stopped',
     conversationId: null,
     senderRunning: false,
     receiverRunning: false,
+    fileSenderRunning: false,
+    fileReceiverRunning: false,
   });
   const [appError, setAppError] = useState('');
   const backgroundStyle = {
@@ -133,11 +136,14 @@ export default function App() {
       setConversations([]);
       setActiveConversationId('');
       setMessages({});
+      setFileTransfers({});
       setWorkerStatus({
         status: 'stopped',
         conversationId: null,
         senderRunning: false,
         receiverRunning: false,
+        fileSenderRunning: false,
+        fileReceiverRunning: false,
       });
       setAppError('');
     } catch (error) {
@@ -155,6 +161,12 @@ export default function App() {
     if (!conversationId) return;
     const items = await window.llmtrans.messages.list(conversationId);
     setMessages((current) => ({...current, [conversationId]: items}));
+  };
+
+  const loadFileTransfers = async (conversationId: string) => {
+    if (!conversationId) return;
+    const items = await window.llmtrans.files.list(conversationId);
+    setFileTransfers((current) => ({...current, [conversationId]: items}));
   };
 
   useEffect(() => {
@@ -176,15 +188,29 @@ export default function App() {
       loadConversations().catch(() => {});
     });
     const removeError = window.llmtrans.onWorkerError((error) => setAppError(error.message));
+    const removeFileChanged = window.llmtrans.onFileChanged((transfer) => {
+      setFileTransfers((current) => {
+        const bucket = current[transfer.conversationId] ?? [];
+        const index = bucket.findIndex((item) => item.id === transfer.id);
+        const next = index < 0
+          ? [...bucket, transfer]
+          : bucket.map((item) => item.id === transfer.id ? transfer : item);
+        return {...current, [transfer.conversationId]: next};
+      });
+    });
     return () => {
       removeStatus();
       removeMessage();
       removeError();
+      removeFileChanged();
     };
   }, []);
 
   useEffect(() => {
-    if (authenticated && activeConversationId) loadMessages(activeConversationId).catch((error) => setAppError(error.message));
+    if (authenticated && activeConversationId) {
+      loadMessages(activeConversationId).catch((error) => setAppError(error.message));
+      loadFileTransfers(activeConversationId).catch((error) => setAppError(error.message));
+    }
   }, [authenticated, activeConversationId]);
 
   useEffect(() => {
@@ -240,6 +266,7 @@ export default function App() {
               conversations={conversations}
               activeConversation={activeConversation}
               messages={activeConversation ? messages[activeConversation.id] ?? [] : []}
+              fileTransfers={activeConversation ? fileTransfers[activeConversation.id] ?? [] : []}
               workerStatus={workerStatus}
               error={appError}
               onConversationSelect={(id) => {
@@ -284,6 +311,25 @@ export default function App() {
                   setAppError(error instanceof Error ? error.message : String(error));
                 }
               }}
+              onSendFile={async () => {
+                if (!activeConversation) return;
+                try {
+                  const filePath = await window.llmtrans.files.chooseSend();
+                  if (!filePath) return;
+                  const transfer = await window.llmtrans.files.send(activeConversation.id, filePath);
+                  setFileTransfers((current) => ({
+                    ...current,
+                    [activeConversation.id]: [
+                      ...(current[activeConversation.id] ?? []).filter((item) => item.id !== transfer.id),
+                      transfer,
+                    ],
+                  }));
+                  setAppError('');
+                } catch (error) {
+                  setAppError(error instanceof Error ? error.message : String(error));
+                }
+              }}
+              onOpenFile={(filePath) => window.llmtrans.files.openLocation(filePath)}
             />
           )}
           {page === 'vpn' && <VpnPage connected={vpnConnected} onToggle={() => setVpnConnected((value) => !value)} mode={proxyMode} onModeChange={setProxyMode} />}
@@ -573,6 +619,7 @@ function ChatPage({
   conversations,
   activeConversation,
   messages,
+  fileTransfers,
   accountName,
   nickname,
   avatarUrl,
@@ -584,10 +631,13 @@ function ChatPage({
   onStart,
   onStop,
   onSend,
+  onSendFile,
+  onOpenFile,
 }: {
   conversations: Conversation[];
   activeConversation?: Conversation;
   messages: ChatMessage[];
+  fileTransfers: ElectronFileTransfer[];
   accountName: string;
   nickname: string;
   avatarUrl: string;
@@ -599,6 +649,8 @@ function ChatPage({
   onStart: () => Promise<void>;
   onStop: () => Promise<void>;
   onSend: (text: string) => Promise<void>;
+  onSendFile: () => Promise<void>;
+  onOpenFile: (filePath: string) => Promise<boolean>;
 }) {
   const {t} = useCopy();
   const [draft, setDraft] = useState('');
@@ -608,10 +660,11 @@ function ChatPage({
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const isCurrentRunning = workerStatus.status === 'running' && workerStatus.conversationId === activeConversation?.id;
   const isCurrentStarting = workerStatus.status === 'starting' && workerStatus.conversationId === activeConversation?.id;
+  const areFileWorkersRunning = isCurrentRunning && workerStatus.fileSenderRunning && workerStatus.fileReceiverRunning;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({top: scrollRef.current.scrollHeight, behavior: 'smooth'});
-  }, [messages, activeConversation?.id]);
+  }, [messages, fileTransfers, activeConversation?.id]);
 
   const send = async () => {
     const text = draft.trim();
@@ -681,11 +734,26 @@ function ChatPage({
         {error && <div className="chat-error"><Info size={16} /> {error}</div>}
         <div ref={scrollRef} className="message-list">
           {messages.map((item) => <MessageBubble key={item.id} message={item} accountName={accountName} nickname={nickname} avatarUrl={avatarUrl} />)}
+          {fileTransfers.map((transfer) => (
+            <FileTransferBubble
+              key={transfer.id}
+              transfer={transfer}
+              onOpen={() => onOpenFile(transfer.filePath)}
+            />
+          ))}
           {!activeConversation && <div className="system-message">{t('请选择 Cookie 文件与对话文件来创建会话。', 'Create a conversation by selecting a Cookie file and a dialogue file.')}</div>}
         </div>
         <footer className="composer-wrap">
           <LiquidGlass className="composer" strong>
-            <button className="icon-button"><Paperclip size={20} /></button>
+            <button
+              className="icon-button"
+              disabled={!areFileWorkersRunning}
+              title={areFileWorkersRunning ? t('发送文件', 'Send file') : t('启动会话后发送文件', 'Start the conversation before sending files')}
+              aria-label={t('发送文件', 'Send file')}
+              onClick={onSendFile}
+            >
+              <Paperclip size={20} />
+            </button>
             <textarea disabled={!isCurrentRunning} value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
@@ -927,6 +995,40 @@ function MessageBubble({
         <div className={`message-bubble ${self ? 'self' : ''}`}>{message.text}</div>
       </div>
       {self && <AvatarPreview avatarUrl={avatarUrl} label={nickname} />}
+    </div>
+  );
+}
+
+function FileTransferBubble({
+  transfer,
+  onOpen,
+}: {
+  transfer: ElectronFileTransfer;
+  onOpen: () => Promise<boolean>;
+}) {
+  const {t} = useCopy();
+  const self = transfer.direction === 'self';
+  const status = {
+    sending: t('发送中', 'Sending'),
+    sent: t('已发送', 'Sent'),
+    received: t('已接收', 'Received'),
+    error: t('发送失败', 'Failed'),
+  }[transfer.status];
+  return (
+    <div className={`file-transfer-row ${self ? 'self' : ''}`}>
+      <button
+        className={`file-transfer-card ${transfer.status}`}
+        disabled={transfer.status !== 'received'}
+        onClick={onOpen}
+      >
+        <span className="file-transfer-icon"><FileText size={22} /></span>
+        <span className="file-transfer-copy">
+          <b>{transfer.fileName}</b>
+          <small>{status} · {transfer.time}</small>
+          {transfer.errorMessage && <em>{transfer.errorMessage}</em>}
+        </span>
+        {transfer.status === 'received' && <FolderOpen size={17} />}
+      </button>
     </div>
   );
 }

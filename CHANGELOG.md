@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-06-13
+
+- Integrated the unchanged `fawenjian.py` and `wenjianjieshou.py` scripts into the Electron conversation lifecycle.
+- Conversation start now launches four workers for text send/receive and file send/receive; conversation stop closes all four.
+- Added a non-invasive Python adapter that supplies frontend-selected paths to the scripts' existing Tk dialogs and converts their output into Electron events.
+- Added file selection, sending, transfer status cards, received-file reveal actions, and persistent `file_transfers` history to the chat workspace.
+- Packaged both original file scripts and the adapter as executable external resources.
+
 ## 2026-06-12
 
 - Fixed packaged Electron team portraits and theme backgrounds by resolving assets relative to the built `dist/index.html` instead of the filesystem root.

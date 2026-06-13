@@ -49,9 +49,15 @@
         "filter": [
           "cmd/1.py",
           "cmd_reserve/1.py",
+          "file/fawenjian.py",
+          "file_recerve/wenjianjieshou.py",
           "cookies/cookies.json",
           "test/test5.txt"
         ]
+      },
+      {
+        "from": "electron/file-worker-adapter.py",
+        "to": "electron/file-worker-adapter.py"
       }
     ],
     "extraFiles": [

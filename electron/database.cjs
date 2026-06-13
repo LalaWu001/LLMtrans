@@ -65,6 +65,24 @@ class DatabaseService {
       CREATE INDEX IF NOT EXISTS idx_messages_conversation_time
         ON messages(conversation_id, sent_at, created_at);
 
+      CREATE TABLE IF NOT EXISTS file_transfers (
+        id TEXT PRIMARY KEY,
+        conversation_id TEXT NOT NULL,
+        sender_account TEXT NOT NULL,
+        sender_nickname TEXT NOT NULL,
+        file_name TEXT NOT NULL,
+        file_path TEXT NOT NULL,
+        direction TEXT NOT NULL CHECK(direction IN ('self', 'peer')),
+        status TEXT NOT NULL,
+        error_message TEXT NOT NULL DEFAULT '',
+        sent_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY(conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_file_transfers_conversation_time
+        ON file_transfers(conversation_id, sent_at, updated_at);
+
       CREATE TABLE IF NOT EXISTS app_settings (
         key TEXT PRIMARY KEY,
         value TEXT NOT NULL
@@ -252,6 +270,65 @@ class DatabaseService {
   setConversationError(id, message) {
     this.db.prepare('UPDATE conversations SET last_error = ?, updated_at = ? WHERE id = ?')
       .run(String(message || ''), new Date().toISOString(), id);
+  }
+
+  addFileTransfer(transfer) {
+    const now = new Date().toISOString();
+    this.db.prepare(`
+      INSERT OR REPLACE INTO file_transfers
+        (id, conversation_id, sender_account, sender_nickname, file_name, file_path, direction, status, error_message, sent_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      transfer.id,
+      transfer.conversationId,
+      transfer.senderAccount,
+      transfer.senderNickname,
+      transfer.fileName,
+      transfer.filePath,
+      transfer.direction,
+      transfer.status,
+      transfer.errorMessage || '',
+      transfer.sentAt,
+      now,
+    );
+    return this.getFileTransfer(transfer.id);
+  }
+
+  updateFileTransfer(id, status, errorMessage = '') {
+    this.db.prepare(`
+      UPDATE file_transfers
+      SET status = ?, error_message = ?, updated_at = ?
+      WHERE id = ?
+    `).run(status, String(errorMessage || ''), new Date().toISOString(), id);
+    return this.getFileTransfer(id);
+  }
+
+  getFileTransfer(id) {
+    const row = this.db.prepare('SELECT * FROM file_transfers WHERE id = ?').get(id);
+    return row ? this.mapFileTransfer(row) : null;
+  }
+
+  listFileTransfers(conversationId) {
+    return this.db.prepare(`
+      SELECT * FROM file_transfers WHERE conversation_id = ?
+      ORDER BY sent_at ASC, updated_at ASC
+    `).all(conversationId).map((row) => this.mapFileTransfer(row));
+  }
+
+  mapFileTransfer(row) {
+    return {
+      id: row.id,
+      conversationId: row.conversation_id,
+      senderAccount: row.sender_account,
+      sender: row.sender_nickname,
+      fileName: row.file_name,
+      filePath: row.file_path,
+      direction: row.direction,
+      status: row.status,
+      errorMessage: row.error_message,
+      time: new Date(row.sent_at).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
+      sentAt: row.sent_at,
+    };
   }
 
   close() {

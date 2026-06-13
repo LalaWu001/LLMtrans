@@ -3,6 +3,8 @@ const stoppedStatus = (): WorkerStatus => ({
   conversationId: null,
   senderRunning: false,
   receiverRunning: false,
+  fileSenderRunning: false,
+  fileReceiverRunning: false,
 });
 
 function createId() {
@@ -24,8 +26,10 @@ export function installBrowserBridge() {
   let workerStatus = stoppedStatus();
   const conversations: ElectronConversation[] = [];
   const messages = new Map<string, ElectronMessage[]>();
+  const fileTransfers = new Map<string, ElectronFileTransfer[]>();
   const statusListeners = new Set<(status: WorkerStatus) => void>();
   const messageListeners = new Set<(message: ElectronMessage) => void>();
+  const fileListeners = new Set<(transfer: ElectronFileTransfer) => void>();
 
   const emitStatus = () => {
     const snapshot = {...workerStatus};
@@ -71,6 +75,34 @@ export function installBrowserBridge() {
       async chooseDialogue() {
         return 'browser-preview/dialogue.txt';
       },
+      async chooseSend() {
+        return 'browser-preview/example.txt';
+      },
+      async list(conversationId) {
+        return [...(fileTransfers.get(conversationId) ?? [])];
+      },
+      async send(conversationId, filePath) {
+        if (!currentAccount) throw new Error('Please sign in first.');
+        const transfer: ElectronFileTransfer = {
+          id: createId(),
+          conversationId,
+          senderAccount: currentAccount.accountName,
+          sender: currentAccount.nickname,
+          fileName: filePath.split(/[\\/]/).pop() || 'example.txt',
+          filePath,
+          direction: 'self',
+          status: 'sent',
+          errorMessage: '',
+          time: timeLabel(),
+          sentAt: new Date().toISOString(),
+        };
+        fileTransfers.set(conversationId, [...(fileTransfers.get(conversationId) ?? []), transfer]);
+        fileListeners.forEach((listener) => listener({...transfer}));
+        return transfer;
+      },
+      async openLocation() {
+        return true;
+      },
     },
     conversations: {
       async list() {
@@ -88,6 +120,7 @@ export function installBrowserBridge() {
         };
         conversations.unshift(conversation);
         messages.set(conversation.id, []);
+        fileTransfers.set(conversation.id, []);
         return {...conversation};
       },
       async start(id) {
@@ -99,6 +132,8 @@ export function installBrowserBridge() {
           conversationId: id,
           senderRunning: true,
           receiverRunning: true,
+          fileSenderRunning: true,
+          fileReceiverRunning: true,
         };
         emitStatus();
         return {...workerStatus};
@@ -152,6 +187,10 @@ export function installBrowserBridge() {
     },
     onWorkerError() {
       return () => {};
+    },
+    onFileChanged(listener) {
+      fileListeners.add(listener);
+      return () => fileListeners.delete(listener);
     },
   };
 }

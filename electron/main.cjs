@@ -45,6 +45,41 @@ function registerIpc() {
     });
     return result.canceled ? null : result.filePaths[0];
   });
+  ipcMain.handle('files:choose-send', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: '选择要发送的文件',
+      properties: ['openFile'],
+    });
+    return result.canceled ? null : result.filePaths[0];
+  });
+  ipcMain.handle('files:list', (_event, conversationId) => database.listFileTransfers(conversationId));
+  ipcMain.handle('files:send', (_event, {conversationId, filePath}) => {
+    const status = workers.getStatus();
+    const account = sessionAccount;
+    if (!account) throw new Error('请先登录');
+    if (status.status !== 'running' || status.conversationId !== conversationId) {
+      throw new Error('请先启动当前对话');
+    }
+    const queued = workers.sendFile(filePath);
+    const transfer = database.addFileTransfer({
+      id: queued.transferId,
+      conversationId,
+      senderAccount: account.accountName,
+      senderNickname: account.nickname,
+      fileName: queued.fileName,
+      filePath: queued.filePath,
+      direction: 'self',
+      status: 'sending',
+      sentAt: queued.sentAt,
+    });
+    mainWindow?.webContents.send('files:changed', transfer);
+    return transfer;
+  });
+  ipcMain.handle('files:open-location', (_event, filePath) => {
+    if (!filePath || !fs.existsSync(filePath)) throw new Error('文件不存在');
+    shell.showItemInFolder(filePath);
+    return true;
+  });
 
   ipcMain.handle('conversations:list', () => database.listConversations());
   ipcMain.handle('conversations:create', (_event, payload) => database.createConversation(payload));
@@ -54,7 +89,8 @@ function registerIpc() {
     const account = sessionAccount;
     if (!conversation) throw new Error('对话不存在');
     if (!account) throw new Error('请先登录');
-    return workers.start({conversation, account});
+    const receiveDirectory = path.join(app.getPath('downloads'), 'llmtrans', conversation.id);
+    return workers.start({conversation, account, receiveDirectory});
   });
   ipcMain.handle('conversations:stop', () => workers.stop());
 
@@ -173,6 +209,30 @@ app.whenReady().then(() => {
     });
     const message = database.getMessage(payload.messageId, account.accountName);
     mainWindow?.webContents.send('messages:new', message);
+  });
+  workers.on('file-event', (payload) => {
+    const conversationId = workers.getStatus().conversationId;
+    const account = sessionAccount;
+    if (!conversationId || !account) return;
+    let transfer = null;
+    if (payload.type === 'sent') {
+      transfer = database.updateFileTransfer(payload.transferId, 'sent');
+    } else if (payload.type === 'error') {
+      transfer = database.updateFileTransfer(payload.transferId, 'error', payload.message);
+    } else if (payload.type === 'received') {
+      transfer = database.addFileTransfer({
+        id: payload.transferId,
+        conversationId,
+        senderAccount: 'remote-file',
+        senderNickname: 'Remote user',
+        fileName: payload.fileName,
+        filePath: payload.filePath,
+        direction: 'peer',
+        status: 'received',
+        sentAt: new Date().toISOString(),
+      });
+    }
+    if (transfer) mainWindow?.webContents.send('files:changed', transfer);
   });
   createWindow();
 

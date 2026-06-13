@@ -11,6 +11,8 @@ declare global {
     conversationId: string | null;
     senderRunning: boolean;
     receiverRunning: boolean;
+    fileSenderRunning: boolean;
+    fileReceiverRunning: boolean;
   };
 
   type ElectronConversation = {
@@ -36,6 +38,20 @@ declare global {
     sentAt: string;
   };
 
+  type ElectronFileTransfer = {
+    id: string;
+    conversationId: string;
+    senderAccount: string;
+    sender: string;
+    fileName: string;
+    filePath: string;
+    direction: 'self' | 'peer';
+    status: 'sending' | 'sent' | 'received' | 'error';
+    errorMessage: string;
+    time: string;
+    sentAt: string;
+  };
+
   interface Window {
     llmtrans: {
       auth: {
@@ -47,6 +63,10 @@ declare global {
       files: {
         chooseCookie(): Promise<string | null>;
         chooseDialogue(): Promise<string | null>;
+        chooseSend(): Promise<string | null>;
+        list(conversationId: string): Promise<ElectronFileTransfer[]>;
+        send(conversationId: string, filePath: string): Promise<ElectronFileTransfer>;
+        openLocation(filePath: string): Promise<boolean>;
       };
       conversations: {
         list(): Promise<ElectronConversation[]>;
@@ -62,6 +82,7 @@ declare global {
       onWorkerStatus(listener: (status: WorkerStatus) => void): () => void;
       onMessage(listener: (message: ElectronMessage) => void): () => void;
       onWorkerError(listener: (error: {conversationId: string | null; message: string}) => void): () => void;
+      onFileChanged(listener: (transfer: ElectronFileTransfer) => void): () => void;
     };
   }
 }

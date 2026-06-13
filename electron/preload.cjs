@@ -10,6 +10,10 @@ contextBridge.exposeInMainWorld('llmtrans', {
   files: {
     chooseCookie: () => ipcRenderer.invoke('files:choose-cookie'),
     chooseDialogue: () => ipcRenderer.invoke('files:choose-dialogue'),
+    chooseSend: () => ipcRenderer.invoke('files:choose-send'),
+    list: (conversationId) => ipcRenderer.invoke('files:list', conversationId),
+    send: (conversationId, filePath) => ipcRenderer.invoke('files:send', {conversationId, filePath}),
+    openLocation: (filePath) => ipcRenderer.invoke('files:open-location', filePath),
   },
   conversations: {
     list: () => ipcRenderer.invoke('conversations:list'),
@@ -36,5 +40,10 @@ contextBridge.exposeInMainWorld('llmtrans', {
     const wrapped = (_event, payload) => listener(payload);
     ipcRenderer.on('worker:error', wrapped);
     return () => ipcRenderer.removeListener('worker:error', wrapped);
+  },
+  onFileChanged: (listener) => {
+    const wrapped = (_event, payload) => listener(payload);
+    ipcRenderer.on('files:changed', wrapped);
+    return () => ipcRenderer.removeListener('files:changed', wrapped);
   },
 });

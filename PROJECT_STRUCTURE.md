@@ -12,11 +12,14 @@
 - `electron/preload.cjs`: Context-isolated renderer API exposing the approved auth, file, conversation, and message operations.
 - `electron/database.cjs`: SQLite schema and persistence for local accounts, conversations, messages, and settings.
 - `electron/worker-manager.cjs`: Single-active-conversation manager for the original sender and receiver Python processes.
+- `electron/file-worker-adapter.py`: Non-invasive stdin/event adapter that supplies paths to the unchanged file sender/receiver scripts.
 - `build/icon.png`: Source application icon retained outside Vite's generated `dist/` directory.
 - `build/icon.ico`: Multi-size Windows icon used by the Electron window and packaged executable.
 - `public/backgrounds/main-bg.jpg`: Local background image used by the authenticated app pages (`Project`, `Chat`, `VPN`, `Settings`, `About`).
 - `public/backgrounds/light-bg.jpg`: Compressed light-mode background used by the React/Electron desktop application.
 - `public/team/`: Full-color teacher and student portraits used by the desktop Team/About page.
+- `Core_Architecture/file/fawenjian.py`: Original file upload script, integrated without modifying its source.
+- `Core_Architecture/file_recerve/wenjianjieshou.py`: Original continuous file download script, integrated without modifying its source.
 - `server/`: Deprecated experimental HTTP bridge. It is not used by the Electron application and will not be extended.
 - `scripts/install-dependencies.cmd`: Double-click launcher distributed as `安装运行环境.cmd`.
 - `scripts/install-dependencies.ps1`: Installs or verifies Python 3.12, Playwright, chardet, and Playwright Chromium for the current Windows user.
@@ -34,11 +37,14 @@
 
 ## Current Architecture Notes
 
-- Existing crawler scripts remain unchanged and are launched as long-running child processes by `electron/worker-manager.cjs`.
+- Existing crawler scripts remain unchanged and are launched through `electron/worker-manager.cjs`.
+- Starting a conversation creates four processes: text sender, text receiver, persistent file-sender adapter, and file receiver.
+- The file adapter replaces only the scripts' Tk file-dialog responses. The original sender still performs one upload per invocation, while the original receiver retains its sequential `text1.txt`, `text2.txt`, and later polling behavior.
+- Received files are saved under `<Downloads>/llmtrans/<conversation-id>/`; received file cards can reveal the saved file in Explorer.
 - Starting a conversation launches `Core_Architecture/cmd/1.py` and `Core_Architecture/cmd_reserve/1.py`. The saved Cookie path and dialogue path are written once to each process through stdin.
 - The built-in conversation is created automatically with `Core_Architecture/cookies/cookies.json` and `Core_Architecture/test/test5.txt`.
 - Subsequent sends reuse the existing sender process and write only the original script menu command plus the encoded message payload.
-- Only one conversation may run at a time. Starting another conversation first stops both workers from the previous conversation.
+- Only one conversation may run at a time. Starting another conversation first stops all four workers from the previous conversation.
 - React communicates only through the context-isolated preload API. It cannot access SQLite, child processes, or arbitrary filesystem APIs directly.
 - The React chat UI now loads accounts, conversations, and messages from the Electron backend rather than demo arrays.
 - The React UI uses a shared liquid-glass visual system in `src/index.css`, now aligned with the user's SiameseBlog glass style. Authenticated pages use `public/backgrounds/main-bg.jpg`; the login page remains the only page with a user-selectable image background.
@@ -52,7 +58,7 @@
 ## Local Data
 
 - SQLite path: `<Electron userData>/data/llmtrans.db`.
-- Tables: `accounts`, `conversations`, `messages`, `app_settings`.
+- Tables: `accounts`, `conversations`, `messages`, `file_transfers`, `app_settings`.
 - Account names are immutable communication identifiers; nicknames are display values.
 - The active login is process-local memory, not a shared SQLite setting. Two application instances on one computer can therefore log in as different accounts without overwriting each other's identity.
 - Message ownership is calculated when messages are loaded: `sender_account` equal to the current account renders as self, and every other account renders as peer. This keeps one device's shared conversation history correct when switching local accounts.
@@ -63,12 +69,13 @@
 ## IPC Surface
 
 - Authentication: `auth:current`, `auth:register`, `auth:login`, `auth:logout`.
-- The top-navigation logout action stops both active Python workers before clearing the current local account session.
+- The top-navigation logout action stops all four active Python workers before clearing the current local account session.
 - Every newly opened application instance requires its own login; account records and conversation history remain shared in SQLite.
 - File selection: `files:choose-cookie`, `files:choose-dialogue`.
+- File transfer: `files:choose-send`, `files:list`, `files:send`, `files:open-location`.
 - Conversations: `conversations:list`, `conversations:create`, `conversations:start`, `conversations:stop`, `conversations:status`.
 - Messages: `messages:list`, `messages:send`.
-- Renderer events: `worker:status`, `worker:error`, `messages:new`.
+- Renderer events: `worker:status`, `worker:error`, `messages:new`, `files:changed`.
 
 ## Packaging Constraint
 
